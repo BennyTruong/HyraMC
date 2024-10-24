@@ -6,13 +6,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Booking</title>
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        /* Style for timeslot boxes */
+        .timeslot-container input[type="radio"] {
+            display: none;  /* Hide the actual radio buttons */
+        }
+
+        .timeslot-container label {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Style for the selected timeslot */
+        .timeslot-container input[type="radio"]:checked + label {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        /* Hover effect */
+        .timeslot-container label:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
 <body>
     <h1>Book a Service</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}  <!-- Includes the motorcycle dropdown -->
+        
+        <!-- Timeslot selection for Pickup -->
+        <h3>Select a Pickup Time:</h3>
+        <div class="timeslot-container">
+            {% for timeslot in pickup_timeslots %}
+                <input type="radio" id="pickup_{{ forloop.counter }}" name="pickup_time" value="{{ timeslot }}">
+                <label for="pickup_{{ forloop.counter }}">{{ timeslot }}</label>
+            {% endfor %}
+        </div>
+
+        <!-- Timeslot selection for Dropoff -->
+        <h3>Select a Dropoff Time:</h3>
+        <div class="timeslot-container">
+            {% for timeslot in dropoff_timeslots %}
+                <input type="radio" id="dropoff_{{ forloop.counter }}" name="dropoff_time" value="{{ timeslot }}">
+                <label for="dropoff_{{ forloop.counter }}">{{ timeslot }}</label>
+            {% endfor %}
+        </div>
+        
         <button type="submit">Submit Booking</button>
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr("#datepicker", {
+                inline: true,
+                dateFormat: "d-m-Y",  // Format the date as required by Django
+                altInput: true,
+                altFormat: "j F, Y",  // Optional: Display a user-friendly format
+                allowInput: true,
+                showMonths: 1,
+                defaultDate: null,
+                enableTime: false
+            });
+        });
+    </script>
 </body>
 </html>
