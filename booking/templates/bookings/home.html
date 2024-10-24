@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motorcycle Rental</title>
+    
+    <!-- Load static files -->
+    {% load static %}
+
+    <!-- Google Fonts for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Basic CSS Styles -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-image: url('{% static 'images/hyramc_logo.png' %}'); /* Replace with actual image URL */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: black;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin: 0;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .cta-btn {
+            background-color: #ff5733;
+            color: black;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background-color: #c44127;
+        }
+
+        /* Featured Section */
+        .featured-bikes {
+            padding: 50px 10%;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .featured-bikes h2 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        .bike-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .bike {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .bike img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .bike h3 {
+            font-size: 1.5rem;
+            margin: 15px 0 10px;
+        }
+
+        .bike p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .bike:hover {
+            transform: translateY(-10px);
+        }
+
+        /* Call to Action Section */
+        .cta-section {
+            background-color: #ff5733;
+            padding: 50px 10%;
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .cta-section .cta-btn {
+            background-color: white;
+            color: #ff5733;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-section .cta-btn:hover {
+            background-color: #c44127;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Rent the Perfect Motorcycle</h1>
+        <p>Your adventure starts here. Find the perfect ride for your next trip.</p>
+        <a href="/booking/create">
+            <button class="cta-btn">Book Now</button>
+        </a>
+    </section>
+
+    <!-- Featured Motorcycles Section -->
+    <section class="featured-bikes">
+        <h2>Featured Motorcycles</h2>
+        <div class="bike-grid">
+            <!-- Motorcycle 1 -->
+            <div class="bike">
+                <img src="https://example.com/bike1.jpg" alt="Bike 1">
+                <h3>Yamaha MT-07</h3>
+                <p>Powerful and lightweight, the Yamaha MT-07 is perfect for both city rides and long tours.</p>
+            </div>
+
+            <!-- Motorcycle 2 -->
+            <div class="bike">
+                <img src="https://example.com/bike2.jpg" alt="Bike 2">
+                <h3>Kawasaki Ninja 650</h3>
+                <p>Sporty and sleek, the Ninja 650 is a favorite for riders looking for excitement on the road.</p>
+            </div>
+
+            <!-- Motorcycle 3 -->
+            <div class="bike">
+                <img src="https://example.com/bike3.jpg" alt="Bike 3">
+                <h3>Honda CBR500R</h3>
+                <p>For the thrill-seekers, the Honda CBR500R offers the perfect balance of speed and comfort.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <h2>Ready to Ride?</h2>
+        <p>Explore the open roads with our top-of-the-line motorcycles. Whether you're planning a weekend getaway or a road trip, we have the perfect bike for you.</p>
+        <a href="/booking/create">
+            <button class="cta-btn">Book Your Ride Now</button>
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Motorcycle Rentals. All rights reserved.</p>
+    </footer>
+</body>
+</html>

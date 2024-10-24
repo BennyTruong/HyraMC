@@ -5,7 +5,7 @@ from .models import Booking
 from datetime import datetime, time, timedelta, date
 
 def home(request):
-    return HttpResponse("Hello, Django!")
+    return render(request, 'bookings/home.html')
 
 def create_booking(request):
     if request.method == 'POST':
