@@ -5,6 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Menu -->
+    {% extends 'bookings/base.html' %}
+    {% block title %}Bokning{% endblock %}
+
+    {% block content %}    
+    
     <title>Hyra MC</title>
 
     <!-- Flatpickr CSS -->
@@ -258,5 +265,7 @@
             });
         });
     </script>
+
+    {% endblock %}
 </body>
 </html>

@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Menu -->
+    {% extends 'bookings/base.html' %}
+    {% block title %}Hem{% endblock %}
+
+    {% block content %}
     <title>Motorcycle Rental</title>
     
     <!-- Load static files -->
@@ -156,7 +162,8 @@
         }
     </style>
 </head>
-<body>
+
+<body>  
     <!-- Hero Section -->
     <section class="hero">
         <h1>Rent the Perfect Motorcycle</h1>
@@ -172,7 +179,7 @@
         <div class="bike-grid">
             <!-- Motorcycle 1 -->
             <div class="bike">
-                <img src="https://example.com/bike1.jpg" alt="Bike 1">
+                <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTq5fO-0Nt7Auy3IIHYGwe3b1IAQj4D5UZOK6TMjNXUxmGjGgW4uClcxyaR7KP8htfWV5TMpdtV-ItVSwPPQlobOPGq8ihxYOvE29kMOdrfOFIonXRNUEs6" alt="Bike 1">
                 <h3>Yamaha MT-07</h3>
                 <p>Powerful and lightweight, the Yamaha MT-07 is perfect for both city rides and long tours.</p>
             </div>
@@ -202,9 +209,6 @@
         </a>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 Motorcycle Rentals. All rights reserved.</p>
-    </footer>
+    {% endblock %}
 </body>
 </html>

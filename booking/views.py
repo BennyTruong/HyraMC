@@ -17,6 +17,12 @@ def create_booking(request):
         form = BookingForm()
     return render(request, 'bookings/create_booking.html', {'form': form})
 
+def price(request):
+    return render(request, 'bookings/price.html')
+
+def contact(request):
+    return render(request, 'bookings/contact.html')
+
 def booking_success(request):
     return render(request, 'bookings/booking_success.html')
 
