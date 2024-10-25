@@ -6,9 +6,22 @@ from .models import Booking
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['name', 'email', 'motorcycle', 'service', 'booking_date', 'pickup_time', 'dropoff_time']
+        fields = ['first_name', 'last_name', 'phone_number', 'email', 'motorcycle', 'service', 'booking_date', 'pickup_time', 'dropoff_time', 'booking_message']
+        labels = {'first_name': 'Förnamn',
+                  'last_name': 'Efternamn',
+                  'phone_number': 'Telefonnummer',
+                  'email': 'E-mail',
+                  'motorcycle': 'Motorcykel',
+                  'service': 'Hyrning',
+                  'booking_date': 'Datum för hyra',
+                  }
         widgets = {
             'booking_date': forms.DateInput(attrs={'id': 'datepicker', 'type': 'text'}),
             'pickup_time': forms.HiddenInput(),  # Pickup time will be selected via buttons
             'dropoff_time': forms.HiddenInput(),  # Dropoff time will be selected via buttons
+            'booking_message': forms.Textarea(attrs={
+                'placeholder': 'Eventuellt meddelande...',
+                'rows': 4,
+                'style': 'width:100%;',
+            }),
         }

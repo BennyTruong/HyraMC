@@ -18,7 +18,9 @@ def get_default_motorcycle():
     motorcycle, created = Motorcycle.objects.get_or_create(model='Välj MC')
     return motorcycle.id
 class Booking(models.Model):
-    name = models.CharField(max_length=200)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    phone_number = models.CharField(max_length=25)
     email = models.EmailField()
     motorcycle = models.ForeignKey(Motorcycle, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
@@ -26,7 +28,8 @@ class Booking(models.Model):
     pickup_time = models.TimeField()
     dropoff_time = models.TimeField()
     created_at = models.DateTimeField(default=timezone.now)
+    booking_message = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"Booking by {self.name} for {self.service} on {self.booking_date} from {self.pickup_time} to {self.dropoff_time}"
+        return f"Booking by {self.first_name} {self.last_name} for {self.service} on {self.booking_date} from {self.pickup_time} to {self.dropoff_time}"
 
