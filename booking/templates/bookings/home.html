@@ -21,15 +21,26 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
+            background-color: #f9f9f9;  /* Overall background color */
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* Style for the 3D text effect */
+        h1 {
+            font-size: 4rem;
+            color: white;  /* Main text color */
+            text-shadow: 
+                1px 1px 0px #000,   /* Shadow to the bottom-right */
+                -1px 1px 0px #000,  /* Shadow to the bottom-left */
+                1px -1px 0px #000,  /* Shadow to the top-right */
+                -1px -1px 0px #000; /* Shadow to the top-left */
+        }
+
         /* Hero Section */
         .hero {
-            /*{% static 'images/hyramc_logo.png' %}*/
-            background-image: url('https://wallpapers.com/images/hd/indian-scout-1920x1080-motorcycle-nc83rhap8ykh4rpp.jpg'); /* Replace with actual image URL */
+            background-image: url('https://s1.picswalls.com/wallpapers/2015/09/27/motorcycle-wallpaper-hd_022809501_278.jpg'); /* Replace with actual image URL */
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -92,24 +103,33 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+            flex-direction: column;  /* Stack content vertically */
+            justify-content: space-between;  /* Ensure content is spaced evenly */
+            min-height: 400px;  /* Maintain a consistent height for the boxes */
+            display: flex;
         }
 
         .bike img {
             width: 100%;
-            height: 200px;
+            height: auto;
             object-fit: cover;
             border-radius: 10px;
         }
 
         .bike h3 {
             font-size: 1.5rem;
-            margin: 15px 0 10px;
+            margin: 15px 0 1px;
         }
 
         .bike p {
             font-size: 1rem;
             color: #666;
         }
+
+        /* Text container */
+        .bike-content {
+        margin-top: auto;  /* Pushes the entire content block (title and paragraph) to the bottom */
+}
 
         .bike:hover {
             transform: translateY(-10px);
@@ -166,46 +186,54 @@
 <body>  
     <!-- Hero Section -->
     <section class="hero">
-        <h1>Rent the Perfect Motorcycle</h1>
-        <p>Your adventure starts here. Find the perfect ride for your next trip.</p>
+        <h1>Hyr motorcyklar och njut av en härlig åktur</h1>
+        <h1><p>Ge dig ut på en spännande tur med en av våra motorcyklar. 
+            <br>Välj från ett utbud av motorcyklar, perfekta för stadskörning, slingriga landsvägar eller öva inför ditt A-kort. 
+            <br>Vi strävar efter enkelhet, flexibla alternativ och oslagbara priser som gör varje resa oförglömlig.</p></h1>
         <a href="/booking/create">
-            <button class="cta-btn">Book Now</button>
+        <button class="cta-btn">Boka MC</button>
         </a>
     </section>
 
     <!-- Featured Motorcycles Section -->
     <section class="featured-bikes">
-        <h2>Featured Motorcycles</h2>
+        <h2>Våra Motorcyklar</h2>
         <div class="bike-grid">
             <!-- Motorcycle 1 -->
             <div class="bike">
-                <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTq5fO-0Nt7Auy3IIHYGwe3b1IAQj4D5UZOK6TMjNXUxmGjGgW4uClcxyaR7KP8htfWV5TMpdtV-ItVSwPPQlobOPGq8ihxYOvE29kMOdrfOFIonXRNUEs6" alt="Bike 1">
-                <h3>Yamaha MT-07</h3>
-                <p>Powerful and lightweight, the Yamaha MT-07 is perfect for both city rides and long tours.</p>
+                <img src="https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg" alt="Bike 1">
+                <div class="bike-content">
+                    <h3>Suzuki Bandit GSF 600</h3>
+                    <p>Kraftfull och lätt, Bandit GSF 600 är perfekt för både stadskörning, långa turer eller att öva med handledare inför A-kortet.</p>
+                </div>
             </div>
-
+           
             <!-- Motorcycle 2 -->
             <div class="bike">
-                <img src="https://example.com/bike2.jpg" alt="Bike 2">
-                <h3>Kawasaki Ninja 650</h3>
-                <p>Sporty and sleek, the Ninja 650 is a favorite for riders looking for excitement on the road.</p>
+                <img src=" https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Bike 2">
+                <div class="bike-content">
+                    <h3>Suzuki Bandit GSF 650</h3>
+                    <p>Sportig och snabb, Bandit GSF 650 är en favorit för förare som söker spänning på vägen.</p>
+                </div>
             </div>
 
             <!-- Motorcycle 3 -->
             <div class="bike">
-                <img src="https://example.com/bike3.jpg" alt="Bike 3">
-                <h3>Honda CBR500R</h3>
-                <p>For the thrill-seekers, the Honda CBR500R offers the perfect balance of speed and comfort.</p>
+                <img src="https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg" alt="Bike 3">
+                <div class="bike-content">
+                    <h3>Honda Varadero XL 1000</h3>
+                    <p>För äventyrssökare erbjuder Honda XL 1000 den perfekta balansen mellan hastighet och komfort</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Call to Action Section -->
     <section class="cta-section">
-        <h2>Ready to Ride?</h2>
-        <p>Explore the open roads with our top-of-the-line motorcycles. Whether you're planning a weekend getaway or a road trip, we have the perfect bike for you.</p>
+        <h2>Boka din MC redan nu så att den reserveras för dig</h2>
+        <p>Alla våra motorcyklar är klassade som tunga och är godkända för uppkörning för A-kortet.</p>
         <a href="/booking/create">
-            <button class="cta-btn">Book Your Ride Now</button>
+            <button class="cta-btn">Till bokning av MC</button>
         </a>
     </section>
 

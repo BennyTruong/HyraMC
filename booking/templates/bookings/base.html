@@ -58,10 +58,10 @@
         .navbar-menu a {
             color: black;
             text-decoration: none;
-            padding: 10px 15px;
+            padding: 1px 20px;
             font-size: 1.5rem; /* Adjust the font size here */
             transition: background-color 0.3s ease;
-            line-height: 50px;  /* Match this to the height of the navbar or menu items */
+            line-height: 70px;  /* Match this to the height of the navbar or menu items */
         }
 
         .navbar-logo {
@@ -96,10 +96,10 @@
             <img src="{% static 'images/hyramc_logo_big.png' %}" alt="My Logo" class="logo"> <!-- Add your logo here -->
         </a>
             <ul class="navbar-menu">
-            <a href="{% url 'contact' %}">Kontakt</a>
-            <a href="{% url 'price' %}">Pris</a>
-            <a href="{% url 'create_booking' %}">Boka Motorcykel</a>
             <a href="{% url 'home' %}">Hem</a>
+            <a href="{% url 'create_booking' %}">Boka Motorcykel</a>
+            <a href="{% url 'price' %}">Pris</a>
+            <a href="{% url 'contact' %}">Kontakt</a>
         </ul>
         
     
