@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Menu -->
+    {% extends 'bookings/base.html' %}
+    {% block title %}Kontakt{% endblock %}
+    {% block content %}    
+
+    <style>
+        .contact-container {
+            max-width: 1500px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;  /* Use flexbox for two columns */
+            gap: 30px;
+        }
+
+        .contact-image {
+            flex: 1;  /* Image takes up one part of the two-column layout */
+        }
+
+        .contact-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .contact-form {
+            flex: 1;  /* Form takes up the other part */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            resize: vertical;
+        }
+
+        textarea {
+            height: 150px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            background-color: #fff;
+        }
+
+        .required:after {
+            content: "*";
+            color: red;
+            margin-left: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .contact-container {
+                flex-direction: column;  /* Stack columns vertically on small screens */
+            }
+
+            .contact-image {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contact-container">
+        <!-- Left Column: Image -->
+        <div class="contact-image">
+            <img src="https://getwallpapers.com/wallpaper/full/5/5/2/763807-new-motorcycle-wallpaper-1920x1200-retina.jpg" alt="Contact Us Image">
+        </div>
+
+        <!-- Right Column: Form -->
+        <div class="contact-form">
+            <h1>Kontakta Oss</h1>
+            <form action="/submit-contact" method="POST">
+                <!-- Name (Mandatory) -->
+                <label for="name" class="required">Namn</label>
+                <input type="text" id="name" name="name" placeholder="Ditt namn" required>
+
+                <!-- Phone Number (Mandatory) -->
+                <label for="phone" class="required">Telefonnummer</label>
+                <input type="tel" id="phone" name="phone" placeholder="Ditt telefonnummer" required>
+
+                <!-- E-mail (Mandatory) -->
+                <label for="email" class="required">E-postadress</label>
+                <input type="email" id="email" name="email" placeholder="Din e-postadress" required>
+
+                <!-- Subject -->
+                <label for="subject">Ämne</label>
+                <input type="text" id="subject" name="subject" placeholder="Ämne för meddelandet">
+
+                <!-- Message (Mandatory) -->
+                <label for="message" class="required">Meddelande</label>
+                <textarea id="message" name="message" placeholder="Skriv ditt meddelande här..." required></textarea>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">Skicka Meddelande</button>
+            </form>
+        </div>
+    </div>
+    
+    {% endblock %}
+</body>
+</html>

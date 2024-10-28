@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Menu -->
+    {% extends 'bookings/base.html' %}
+    {% block title %}Pris{% endblock %}
+    {% block content %}  
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pricing-section {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .pricing-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .pricing-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .pricing-card p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .pricing-card .price {
+            font-size: 2rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .pricing-card button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="pricing-section">
+        <h1>Priser för Hyr Motorcyklar</h1>
+
+        <!-- Pricing Grid -->
+        <div class="pricing-grid">
+            <!-- Motorcycle 1 -->
+            <div class="pricing-card">
+                <img src="https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg" alt="Suzuki Bandit GSF 600">
+                <h3>Suzuki Bandit GSF 600</h3>
+                <p>Perfekt för stadskörning och längre turer.</p>
+                <div class="price">600 kr/dag</div>
+                <button>Boka Nu</button>
+            </div>
+
+            <!-- Motorcycle 2 -->
+            <div class="pricing-card">
+                <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Suzuki Bandit GSF 650">
+                <h3>Suzuki Bandit GSF 650</h3>
+                <p>Sportig och elegant, perfekt för spänning på vägen.</p>
+                <div class="price">650 kr/dag</div>
+                <button>Boka Nu</button>
+            </div>
+
+            <!-- Motorcycle 3 -->
+            <div class="pricing-card">
+                <img src="https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg" alt="Honda Varadero XL 1000">
+                <h3>Honda Varadero XL 1000</h3>
+                <p>Balans mellan hastighet och komfort för äventyrssökare.</p>
+                <div class="price">700 kr/dag</div>
+                <button>Boka Nu</button>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <h2>Jämför Funktioner</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Funktion</th>
+                    <th>Suzuki Bandit GSF 600</th>
+                    <th>Suzuki Bandit GSF 650</th>
+                    <th>Honda Varadero XL 1000</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ABS</td>
+                    <td>Nej</td>
+                    <td>Ja</td>
+                    <td>Ja</td>
+                </tr>
+                <tr>
+                    <td>Bränsleinsprutning</td>
+                    <td>Ja</td>
+                    <td>Ja</td>
+                    <td>Ja</td>
+                </tr>
+                <tr>
+                    <td>Vikt (kg)</td>
+                    <td>218 kg</td>
+                    <td>240 kg</td>
+                    <td>275 kg</td>
+                </tr>
+                <tr>
+                    <td>Motorvolym</td>
+                    <td>600cc</td>
+                    <td>650cc</td>
+                    <td>1000cc</td>
+                </tr>
+                <tr>
+                    <td>Max Effekt</td>
+                    <td>77 hk</td>
+                    <td>85 hk</td>
+                    <td>94 hk</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    {% endblock %}
+</body>
+</html>
