@@ -2,6 +2,7 @@
 
 from django import forms
 from .models import Booking
+from .models import ContactMessage
 
 class BookingForm(forms.ModelForm):
     class Meta:
@@ -24,4 +25,16 @@ class BookingForm(forms.ModelForm):
                 'rows': 4,
                 'style': 'width:100%;',
             }),
+        }
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = ['name', 'phone', 'email', 'subject', 'message']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Ditt namn', 'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'placeholder': 'Ditt telefonnummer', 'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'placeholder': 'Din e-postadress', 'class': 'form-control'}),
+            'subject': forms.TextInput(attrs={'placeholder': 'Ämne för meddelandet', 'class': 'form-control'}),
+            'message': forms.Textarea(attrs={'placeholder': 'Skriv ditt meddelande här...', 'class': 'form-control', 'rows': 4}),
         }

@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from .forms import BookingForm
 from .models import Booking
 from datetime import datetime, time, timedelta, date
+from .forms import ContactForm
+from .models import ContactMessage
+from django.core.mail import send_mail
 
 def home(request):
     return render(request, 'bookings/home.html')
@@ -53,3 +56,27 @@ def create_booking(request):
         'pickup_timeslots': pickup_timeslots,
         'dropoff_timeslots': dropoff_timeslots
     })
+
+
+def contact_submit(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the message to the database
+
+            # Send an email notification
+            send_mail(
+                subject=f"New Contact Form Submission from {form.cleaned_data['name']}",
+                message=f"Message: {form.cleaned_data['message']}\nPhone: {form.cleaned_data['phone']}\nEmail: {form.cleaned_data['email']}",
+                from_email=form.cleaned_data['email'],
+                recipient_list=['benny@hotmail.se'],
+            )
+
+            return redirect('contact_success')  # Redirect to a success page or message
+    else:
+        form = ContactForm()
+
+    return render(request, 'bookings/contact.html', {'form': form})
+
+def contact_success_view(request):
+    return render(request, 'bookings/contact_success.html')

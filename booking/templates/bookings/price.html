@@ -19,7 +19,7 @@
         }
 
         .pricing-section {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 50px auto;
             padding: 20px;
             background-color: white;
@@ -42,6 +42,11 @@
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+
+            /* Flexbox setup to push text to the bottom */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;  /* Ensure space between image and text */
         }
 
         .pricing-card:hover {
@@ -70,6 +75,7 @@
             font-size: 2rem;
             color: #007bff;
             margin-bottom: 20px;
+            margin-top: auto;  /* Push the price and button to the bottom */
         }
 
         .pricing-card button {
@@ -123,7 +129,7 @@
 <body>
 
     <section class="pricing-section">
-        <h1>Priser för Hyr Motorcyklar</h1>
+        <h1>Priser för att hyra Motorcyklar</h1>
 
         <!-- Pricing Grid -->
         <div class="pricing-grid">
@@ -132,7 +138,7 @@
                 <img src="https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg" alt="Suzuki Bandit GSF 600">
                 <h3>Suzuki Bandit GSF 600</h3>
                 <p>Perfekt för stadskörning och längre turer.</p>
-                <div class="price">600 kr/dag</div>
+                <div class="price">1100 kr/dag</div>
                 <button>Boka Nu</button>
             </div>
 
@@ -141,7 +147,7 @@
                 <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Suzuki Bandit GSF 650">
                 <h3>Suzuki Bandit GSF 650</h3>
                 <p>Sportig och elegant, perfekt för spänning på vägen.</p>
-                <div class="price">650 kr/dag</div>
+                <div class="price">1500 kr/dag</div>
                 <button>Boka Nu</button>
             </div>
 
@@ -150,13 +156,13 @@
                 <img src="https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg" alt="Honda Varadero XL 1000">
                 <h3>Honda Varadero XL 1000</h3>
                 <p>Balans mellan hastighet och komfort för äventyrssökare.</p>
-                <div class="price">700 kr/dag</div>
+                <div class="price">1300 kr/dag</div>
                 <button>Boka Nu</button>
             </div>
         </div>
 
         <!-- Comparison Table -->
-        <h2>Jämför Funktioner</h2>
+        <h2>Jämför motorcyklarnas egenskaper</h2>
         <table class="comparison-table">
             <thead>
                 <tr>
@@ -171,13 +177,13 @@
                     <td>ABS</td>
                     <td>Nej</td>
                     <td>Ja</td>
-                    <td>Ja</td>
+                    <td>Nej</td>
                 </tr>
                 <tr>
                     <td>Bränsleinsprutning</td>
+                    <td>Nej</td>
                     <td>Ja</td>
-                    <td>Ja</td>
-                    <td>Ja</td>
+                    <td>Nej</td>
                 </tr>
                 <tr>
                     <td>Vikt (kg)</td>

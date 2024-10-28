@@ -120,7 +120,9 @@
         <!-- Right Column: Form -->
         <div class="contact-form">
             <h1>Kontakta Oss</h1>
-            <form action="/submit-contact" method="POST">
+            <form method="POST" action="{% url 'contact_submit' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
                 <!-- Name (Mandatory) -->
                 <label for="name" class="required">Namn</label>
                 <input type="text" id="name" name="name" placeholder="Ditt namn" required>
