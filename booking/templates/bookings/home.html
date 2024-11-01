@@ -224,6 +224,35 @@
         </a>
     </section>
 
+    <h3 class="text-center mt-5">Customer Reviews</h3>
+    <div class="container">
+        <div class="row justify-content-center">
+            {% for review in reviews %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ review.name }}</h5>
+                            <p class="card-text">
+                                {% for i in "★★★★★" %}
+                                    <span class="text-warning">{{ i }}</span>
+                                {% endfor %}
+                                <br>
+                                {{ review.review_text }}
+                            </p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <small>Posted on {{ review.created_at|date:"F d, Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-md-12 text-center">
+                    <p>No reviews yet. Be the first to share your experience!</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
     {% endblock %}
 </body>
 </html>

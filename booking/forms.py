@@ -3,6 +3,7 @@
 from django import forms
 from .models import Booking
 from .models import ContactMessage
+from .models import Review
 
 class BookingForm(forms.ModelForm):
     class Meta:
@@ -37,4 +38,14 @@ class ContactForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'placeholder': 'Din e-postadress', 'class': 'form-control'}),
             'subject': forms.TextInput(attrs={'placeholder': 'Ämne för meddelandet', 'class': 'form-control'}),
             'message': forms.Textarea(attrs={'placeholder': 'Skriv ditt meddelande här...', 'class': 'form-control', 'rows': 4}),
+        }
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['name', 'rating', 'review_text']
+        labels = {
+            'name': 'Ditt namn',
+            'rating': 'Betyg',
+            'review_text': 'Kommentar',
         }

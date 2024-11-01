@@ -1,7 +1,7 @@
 # bookings/admin.py
 
 from django.contrib import admin
-from .models import Booking, Motorcycle, Service, ContactMessage
+from .models import Booking, Motorcycle, Service, ContactMessage, Review
 
 # Register your models here
 admin.site.register(Motorcycle)
@@ -19,3 +19,14 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'subject', 'message','created_at')
     search_fields = ('name', 'email', 'subject')
     list_filter = ('created_at',)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('name', 'rating', 'review_text', 'is_approved', 'created_at')
+    list_filter = ('is_approved', 'rating', 'created_at')
+    search_fields = ('name', 'review_text')
+    actions = ['approve_reviews']
+
+    def approve_reviews(self, request, queryset):
+        queryset.update(is_approved=True)
+    approve_reviews.short_description = 'Approve selected reviews'

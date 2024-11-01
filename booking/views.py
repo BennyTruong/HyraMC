@@ -5,10 +5,13 @@ from .models import Booking
 from datetime import datetime, time, timedelta, date
 from .forms import ContactForm
 from .models import ContactMessage
+from .forms import ReviewForm
+from .models import Review
 from django.core.mail import send_mail
 
 def home(request):
-    return render(request, 'bookings/home.html')
+    reviews = Review.objects.filter(is_approved=True).order_by('-created_at')  # Only get approved reviews
+    return render(request, 'bookings/home.html', {'reviews': reviews})
 
 def create_booking(request):
     if request.method == 'POST':
@@ -80,3 +83,15 @@ def contact_submit(request):
 
 def contact_success_view(request):
     return render(request, 'bookings/contact_success.html')
+
+def add_review(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.name = form.cleaned_data['name']  # Set the name from the form input
+            review.save()
+            return redirect('home')  # Redirect to the home page after submitting the review
+    else:
+        form = ReviewForm()
+    return render(request, 'bookings/add_review.html', {'form': form})

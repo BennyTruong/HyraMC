@@ -1,0 +1,6 @@
+<h2>Dela med dig av din upplevelse när du hyrde din motorcykel av oss</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Skicka</button>
+</form>

@@ -60,3 +60,21 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f'Message from {self.name} - {self.email}'
+    
+class Review(models.Model):
+    RATING_CHOICES = [
+        (1, '1 - Dåligt'),
+        (2, '2 - Inte bra'),
+        (3, '3 - Okej'),
+        (4, '4 - Bra'),
+        (5, '5 - Utmärkt'),
+    ]
+
+    name = models.CharField(max_length=100)  # User-provided name for the review
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
+    review_text = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    is_approved = models.BooleanField(default=False)  # Field to indicate if the review is approved
+
+    def __str__(self):
+        return f"Review by {self.name} ({self.rating} stars)"
