@@ -89,7 +89,12 @@ def add_review(request):
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.name = form.cleaned_data['name']  # Set the name from the form input
+            # Populate fields from form data
+            review.first_name = form.cleaned_data['first_name']
+            review.last_name = form.cleaned_data['last_name']
+            review.motorcycle = form.cleaned_data['motorcycle']
+            review.rating = form.cleaned_data['rating']
+            review.review_text = form.cleaned_data['review_text']
             review.save()
             return redirect('home')  # Redirect to the home page after submitting the review
     else:

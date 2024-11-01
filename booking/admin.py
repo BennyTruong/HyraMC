@@ -22,9 +22,9 @@ class ContactMessageAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('name', 'rating', 'review_text', 'is_approved', 'created_at')
-    list_filter = ('is_approved', 'rating', 'created_at')
-    search_fields = ('name', 'review_text')
+    list_display = ('first_name', 'last_name', 'motorcycle', 'rating', 'review_text', 'is_approved', 'created_at')
+    list_filter = ('is_approved', 'rating', 'created_at', 'motorcycle')
+    search_fields = ('first_name', 'last_name,' 'review_text')
     actions = ['approve_reviews']
 
     def approve_reviews(self, request, queryset):

@@ -70,11 +70,13 @@ class Review(models.Model):
         (5, '5 - Utmärkt'),
     ]
 
-    name = models.CharField(max_length=100)  # User-provided name for the review
+    first_name = models.CharField(max_length=100)  # First name of the reviewer
+    last_name = models.CharField(max_length=100)  # Last name of the reviewer
     rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
+    motorcycle = models.ForeignKey('Motorcycle', on_delete=models.CASCADE, related_name='reviews')  # Link to the rented motorcycle
     review_text = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     is_approved = models.BooleanField(default=False)  # Field to indicate if the review is approved
 
     def __str__(self):
-        return f"Review by {self.name} ({self.rating} stars)"
+        return f"Review by {self.first_name} {self.last_name} ({self.rating} hearts)"

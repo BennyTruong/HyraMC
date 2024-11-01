@@ -43,9 +43,11 @@ class ContactForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['name', 'rating', 'review_text']
+        fields = ['first_name', 'last_name', 'motorcycle', 'rating', 'review_text']
         labels = {
-            'name': 'Ditt namn',
+            'first_name': 'Förnamn',
+            'last_name': 'Efternamn (kommer inte visas för andra)',
+            'motorcycle': 'Motorcykel du hyrde',
             'rating': 'Betyg',
             'review_text': 'Kommentar',
         }
