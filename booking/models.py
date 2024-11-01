@@ -3,9 +3,16 @@ from django.utils import timezone
 
 class Motorcycle(models.Model):
     model = models.CharField(max_length=100)
+    price_rent_1d = models.IntegerField(default=0)  # Rental price per day
+    price_practise_1d = models.IntegerField(default=0)  # Practise price per day
+    price_test = models.IntegerField(default=0)  # Price for driving test
+    availability_status = models.BooleanField(default=True)  # Availability status: True if available, False if not
 
     def __str__(self):
         return self.model
+    
+    def is_available(self):
+        return self.availability_status
 
 class Service(models.Model):
     service = models.CharField(max_length=100)
