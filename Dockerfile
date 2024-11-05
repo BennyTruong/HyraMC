@@ -2,16 +2,16 @@
 FROM python:3.13-slim
 
 # Step 2: Set the working directory in the container
-WORKDIR /app
+WORKDIR /hyramc
 
 # Step 3: Copy the requirements file into the container
-COPY requirements.txt /app/
+COPY requirements.txt /hyramc/
 
 # Step 4: Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Step 5: Copy the project files into the container
-COPY . /app
+COPY . /hyramc
 
 # Step 6: Set environment variables for Django
 # Set this to 'production' in production environments
