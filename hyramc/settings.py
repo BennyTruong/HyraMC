@@ -117,7 +117,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
+STATIC_URL = 'http://90.229.162.60:8080/static/'  # Replace with the actual IP of your NAS going to the nginx-static container
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # This is where you will store your static files, including images
