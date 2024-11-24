@@ -1,9 +1,7 @@
 # booking/forms.py
 
 from django import forms
-from .models import Booking
-from .models import ContactMessage
-from .models import Review
+from .models import Booking, ContactMessage, Review
 
 class BookingForm(forms.ModelForm):
     class Meta:
@@ -16,7 +14,7 @@ class BookingForm(forms.ModelForm):
                   'motorcycle': 'Motorcykel',
                   'service': 'Hyrning',
                   'booking_date': 'Datum för hyra',
-                  }
+        }
         widgets = {
             'booking_date': forms.DateInput(attrs={'id': 'datepicker', 'type': 'text'}),
             'pickup_time': forms.HiddenInput(),  # Pickup time will be selected via buttons

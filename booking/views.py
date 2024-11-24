@@ -1,12 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import BookingForm
-from .models import Booking
+from .forms import BookingForm, ContactForm, ReviewForm
+from .models import Booking, ContactMessage, Review
 from datetime import datetime, time, timedelta, date
-from .forms import ContactForm
-from .models import ContactMessage
-from .forms import ReviewForm
-from .models import Review
 from django.core.mail import send_mail
 
 def home(request):
@@ -99,4 +95,5 @@ def add_review(request):
             return redirect('home')  # Redirect to the home page after submitting the review
     else:
         form = ReviewForm()
+    
     return render(request, 'bookings/add_review.html', {'form': form})
