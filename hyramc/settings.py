@@ -118,7 +118,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 #STATIC_URL = '/static/'
-STATIC_URL = 'https://bennytruong.se/hyramc/static/'  # Replace with the actual IP of your NAS going to the nginx-static container
+STATIC_URL = '/static/'  # Replace with the actual IP of your NAS going to the nginx-static container
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # This is where you will store your static files, including images
