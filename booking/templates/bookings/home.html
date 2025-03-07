@@ -1,69 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Menu -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     {% extends 'bookings/base.html' %}
     {% block title %}Hem{% endblock %}
     {% block content %}
-    
-    <!-- Load static files -->
-    {% load static %}
-    
-    <!-- Basic CSS Styles -->
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    />
+
     <style>
-        /* Style for the 3D text effect */
-        h1 {
-            font-size: 4rem;
-            color: white;  /* Main text color */
-            text-shadow: 
-                1px 1px 0px #000,   /* Shadow to the bottom-right */
-                -1px 1px 0px #000,  /* Shadow to the bottom-left */
-                1px -1px 0px #000,  /* Shadow to the top-right */
-                -1px -1px 0px #000; /* Shadow to the top-left */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
         /* Hero Section */
         .hero {
-            background-image: url('https://s1.picswalls.com/wallpapers/2015/09/27/motorcycle-wallpaper-hd_022809501_278.jpg'); /* Replace with actual image URL */
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
+            position: relative;
+            width: 100%;
+            height: 80vh;
+            background: url("https://s1.picswalls.com/wallpapers/2015/09/27/motorcycle-wallpaper-hd_022809501_278.jpg") no-repeat center center/cover;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: orange;
             text-align: center;
         }
-
-        .hero h1 {
+        /* Add a subtle overlay for readability */
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            color: #fff;
+            max-width: 800px;
+            padding: 0 1rem;
+        }
+        .hero-content h1 {
             font-size: 3rem;
-            margin: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
         }
-
-        .hero p {
+        .hero-content p {
             font-size: 1.2rem;
-            margin-top: 10px;
+            line-height: 1.5;
+            margin-bottom: 2rem;
         }
-
-        .cta-btn {
-            background-color: #ff5733;
-            color: black;
+        .hero-content .cta-btn {
+            background-color: #f4a261;
+            color: #000;
             padding: 15px 30px;
             font-size: 1.1rem;
-            margin-top: 20px;
             text-transform: uppercase;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
-        .cta-btn:hover {
+        .hero-content .cta-btn:hover {
             background-color: #c44127;
+            color: #fff;
         }
 
         /* Featured Section */
@@ -72,76 +93,64 @@
             background-color: #f9f9f9;
             text-align: center;
         }
-
         .featured-bikes h2 {
             font-size: 2.5rem;
             margin-bottom: 40px;
+            color: #333;
         }
-
         .bike-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
         }
-
         .bike {
-            background-color: white;
+            background-color: #fff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
-            flex-direction: column;  /* Stack content vertically */
-            justify-content: space-between;  /* Ensure content is spaced evenly */
-            min-height: 400px;  /* Maintain a consistent height for the boxes */
             display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 400px;
         }
-
         .bike img {
             width: 100%;
             height: auto;
             object-fit: cover;
             border-radius: 10px;
         }
-
         .bike h3 {
             font-size: 1.5rem;
             margin: 15px 0 1px;
+            color: #333;
         }
-
         .bike p {
             font-size: 1rem;
             color: #666;
         }
-
-        /* Text container */
-        .bike-content {
-        margin-top: auto;  /* Pushes the entire content block (title and paragraph) to the bottom */
-        }
-
         .bike:hover {
             transform: translateY(-10px);
         }
 
-        /* Call to Action Section */
+        /* CTA Section */
         .cta-section {
-            background-color: #ff5733;
+            background-color: #f4a261;
             padding: 50px 10%;
-            color: white;
             text-align: center;
         }
-
         .cta-section h2 {
             font-size: 2.5rem;
             margin-bottom: 20px;
+            color: #000;
         }
-
         .cta-section p {
             font-size: 1.2rem;
             margin-bottom: 30px;
+            color: #000;
         }
-
         .cta-section .cta-btn {
-            background-color: white;
+            background-color: #fff;
             color: #ff5733;
             padding: 15px 30px;
             font-size: 1.1rem;
@@ -149,20 +158,27 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
         .cta-section .cta-btn:hover {
             background-color: #c44127;
-            color: white;
+            color: #fff;
+        }
+
+        /* Reviews Title */
+        .reviews-title {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.8rem;
+            color: #333;
         }
 
         /* Footer */
         footer {
             background-color: #333;
-            color: white;
+            color: #fff;
             padding: 20px 0;
             text-align: center;
+            margin-top: 40px;
         }
-
         footer p {
             margin: 0;
             font-size: 0.9rem;
@@ -170,46 +186,46 @@
     </style>
 </head>
 
-<body>  
+<body>
     <!-- Hero Section -->
     <section class="hero">
-        <h1>Hyr motorcyklar och njut av en härlig åktur</h1>
-        <h1><p>Ge dig ut på en spännande tur med en av våra motorcyklar. 
-            <br>Välj från ett utbud av motorcyklar, perfekta för stadskörning, slingriga landsvägar eller öva inför ditt A-kort. 
-            <br>Vi strävar efter enkelhet, flexibla alternativ och oslagbara priser som gör varje resa oförglömlig.</p></h1>
-        <a href="/create">
-        <button class="cta-btn">Boka MC</button>
-        </a>
+        <div class="hero-content">
+            <h1>Hyr motorcyklar och njut av en härlig åktur</h1>
+            <p>
+                Ge dig ut på en spännande tur med en av våra motorcyklar. Välj från ett utbud av hojar, perfekt för både stadskörning och slingriga landsvägar. Vi strävar efter enkelhet, flexibla alternativ och bra priser.
+            </p>
+            <a href="/create">
+                <button class="cta-btn">Boka MC</button>
+            </a>
+        </div>
     </section>
 
-    <!-- Featured Motorcycles Section -->
+    <!-- Featured Motorcycles -->
     <section class="featured-bikes">
         <h2>Våra Motorcyklar</h2>
         <div class="bike-grid">
             <!-- Motorcycle 1 -->
             <div class="bike">
-                <img src="https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg" alt="Bike 1">
-                <div class="bike-content">
+                <img src="https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg" alt="Suzuki Bandit GSF 600" />
+                <div>
                     <h3>Suzuki Bandit GSF 600</h3>
-                    <p>Kraftfull och lätt, Bandit GSF 600 är perfekt för både stadskörning, långa turer eller att öva med handledare inför A-kortet.</p>
+                    <p>Perfekt allround för stadskörning, längre turer, att öva inför A-kortet eller uppkörning.</p>
                 </div>
             </div>
-           
             <!-- Motorcycle 2 -->
             <div class="bike">
-                <img src=" https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Bike 2">
-                <div class="bike-content">
+                <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba(39,42,44,0)&mode=pad" alt="Suzuki Bandit GSF 650" />
+                <div>
                     <h3>Suzuki Bandit GSF 650</h3>
-                    <p>Sportig och snabb, Bandit GSF 650 är en favorit för förare som söker spänning på vägen.</p>
+                    <p>Lättkörd och rekommenderas för både nybörjare och vana förare för uppkörning, stadskörning eller övning inför A-kortet.</p>
                 </div>
             </div>
-
             <!-- Motorcycle 3 -->
             <div class="bike">
-                <img src="https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg" alt="Bike 3">
-                <div class="bike-content">
+                <img src="https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg" alt="Honda Varadero XL 1000" />
+                <div>
                     <h3>Honda Varadero XL 1000</h3>
-                    <p>För äventyrssökare erbjuder Honda XL 1000 den perfekta balansen mellan hastighet och komfort</p>
+                    <p>Bekväm och trevlig äventyrshoj med handtagsvärme, stort vindskydd och hårda packväskor som kan monteras vid önskemål.</p>
                 </div>
             </div>
         </div>
@@ -217,18 +233,18 @@
 
     <!-- Call to Action Section -->
     <section class="cta-section">
-        <h2>Boka din MC redan nu så att den reserveras för dig</h2>
-        <p>Alla våra motorcyklar är klassade som tunga och är godkända för uppkörning för A-kortet.</p>
+        <h2>Färdig att boka? Välj MC och ledigt datum.</h2>
+        <p>Alla våra motorcyklar är godkända för uppkörning till A-kortet.</p>
         <a href="/create">
             <button class="cta-btn">Till bokning av MC</button>
         </a>
     </section>
 
-<!-- Review Section -->
-<h3 class="text-center mt-5">Kundbetyg</h3>
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        {% for review in reviews %}
+    <!-- Reviews -->
+    <h3 class="reviews-title">Recensioner från tidigare kunder</h3>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            {% for review in reviews %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow border-0" style="border-radius: 25px;">
                     <div class="card-body">
@@ -251,13 +267,13 @@
                     </div>
                 </div>
             </div>
-        {% empty %}
+            {% empty %}
             <div class="col-md-12 text-center">
-                <p>No reviews yet. Be the first to share your experience!</p>
+                <p>Inga recensioner ännu. Var först med att dela din upplevelse!</p>
             </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
 
     {% endblock %}
 </body>
