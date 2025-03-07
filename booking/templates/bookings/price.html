@@ -1,210 +1,213 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Menu -->
     {% extends 'bookings/base.html' %}
-    {% block title %}Pris{% endblock %}
-    {% block content %}  
+    {% block title %}Pris och Jämförelse{% endblock %}
+    {% block content %}
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    />
 
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+        }
 
-        h1, h2 {
+        h1 {
             text-align: center;
+            margin-top: 40px;
             margin-bottom: 20px;
+            font-weight: 600;
+            color: #333;
         }
 
         .pricing-section {
-            max-width: 1300px;
-            margin: 50px auto;
+            max-width: 1600px;
+            margin: 0 auto 50px auto;
             padding: 20px;
-            background-color: white;
-            border-radius: 10px;
+            background-color: #fff;
+            border-radius: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+        .comparison-table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
         }
 
-        .pricing-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-
-            /* Flexbox setup to push text to the bottom */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;  /* Ensure space between image and text */
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .pricing-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .pricing-card p {
-            font-size: 1rem;
-            margin-bottom: 15px;
-        }
-
-        .pricing-card .price {
-            font-size: 2rem;
-            color: #007bff;
-            margin-bottom: 20px;
-            margin-top: auto;  /* Push the price and button to the bottom */
-        }
-
-        .pricing-card button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .pricing-card button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Comparison Table */
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 40px;
+            table-layout: fixed; /* ensures consistent column widths */
         }
 
-        .comparison-table th, .comparison-table td {
+        /* Light pastel blue theme */
+        .comparison-table th {
+            background-color: #8ecae6; /* Pastel blue for table header */
+            color: #000; /* changed from white to black */
+            font-weight: 600;
             padding: 15px;
             text-align: center;
             border: 1px solid #ddd;
         }
 
-        .comparison-table th {
-            background-color: #007bff;
-            color: white;
+        .comparison-table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 15px;
+            border: 1px solid #ddd;
+            word-wrap: break-word; /* allow text to wrap in fixed layout */
         }
 
         .comparison-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .pricing-grid {
-                grid-template-columns: 1fr;
-            }
+        /* Match the original style: full width inside each cell, fixed height 200px */
+        .comparison-table img {
+    width: 100%;
+    height: 240px; /* 20% taller than the original 200px */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
 
-            .pricing-card {
-                margin-bottom: 20px;
-            }
+        /* Button styling for pastel blue theme */
+        .book-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #8ecae6;
+            color: #000; /* changed from white to black */
+            text-decoration: none;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-weight: 600;
+        }
+
+        .book-button:hover {
+            background-color: #7bbdd4; /* Slightly darker shade for hover */
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            /* Images will scale to the cell width, but remain at a 200px height. */
         }
     </style>
 </head>
+
 <body>
-
+    <h1>Pris och Jämförelse</h1>
     <section class="pricing-section">
-        <h1>Priser för att hyra Motorcyklar</h1>
-
-        <!-- Pricing Grid -->
-        <div class="pricing-grid">
-            <!-- Motorcycle 1 -->
-            <div class="pricing-card">
-                <img src="https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg" alt="Suzuki Bandit GSF 600">
-                <h3>Suzuki Bandit GSF 600</h3>
-                <p>Perfekt för stadskörning och längre turer.</p>
-                <div class="price">1100 kr/dag</div>
-                <button>Boka Nu</button>
-            </div>
-
-            <!-- Motorcycle 2 -->
-            <div class="pricing-card">
-                <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Suzuki Bandit GSF 650">
-                <h3>Suzuki Bandit GSF 650</h3>
-                <p>Sportig och elegant, perfekt för spänning på vägen.</p>
-                <div class="price">1400 kr/dag</div>
-                <button>Boka Nu</button>
-            </div>
-
-            <!-- Motorcycle 3 -->
-            <div class="pricing-card">
-                <img src="https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg" alt="Honda Varadero XL 1000">
-                <h3>Honda Varadero XL 1000</h3>
-                <p>Balans mellan hastighet och komfort för äventyrssökare.</p>
-                <div class="price">1300 kr/dag</div>
-                <button>Boka Nu</button>
-            </div>
+        <div class="comparison-table-wrapper">
+            <table class="comparison-table">
+                <!-- Adjust the first col to be 15%, then three columns that share the remaining 85% -->
+                <colgroup>
+                    <col style="width: 15%;" />
+                    <col style="width: 28.333%;" />
+                    <col style="width: 28.333%;" />
+                    <col style="width: 28.333%;" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Modell</th>
+                        <th>Suzuki Bandit GSF 600</th>
+                        <th>Suzuki Bandit GSF 650</th>
+                        <th>Honda Varadero XL 1000</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Images -->
+                    <tr>
+                        <td><strong></strong></td>
+                        <td>
+                            <img src="https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg"
+                                 alt="Suzuki Bandit GSF 600">
+                        </td>
+                        <td>
+                            <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg"
+                                 alt="Suzuki Bandit GSF 650">
+                        </td>
+                        <td>
+                            <img src="https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg"
+                                 alt="Honda Varadero XL 1000">
+                        </td>
+                    </tr>
+                    <!-- Descriptions -->
+                    <tr>
+                        <td><strong>Beskrivning</strong></td>
+                        <td>Perfekt allround för stadskörning, längre turer och uppkörning.</td>
+                        <td>Lättkörd och rekommenderas för både nybörjare och vana förare för uppkörning eller stadskörning.</td>
+                        <td>Bekväm och trevlig äventyrshoj med handtagsvärme, stort vindskydd och hårda packväskor som kan monteras vid önskemål.</td>
+                    </tr>
+                    <!-- Motorvolym -->
+                    <tr>
+                        <td><strong>Motorvolym</strong></td>
+                        <td>600cc</td>
+                        <td>650cc</td>
+                        <td>1000cc</td>
+                    </tr>
+                    <!-- MC-klass -->
+                    <tr>
+                        <td><strong>MC-klass för uppkörning</strong></td>
+                        <td>A - Tung MC</td>
+                        <td>A - Tung MC</td>
+                        <td>A - Tung MC</td>
+                    </tr>
+                    <!-- Sadelhöjd -->
+                    <tr>
+                        <td><strong>Sadelhöjd</strong></td>
+                        <td>Standard - Passar dom flesta personer</td>
+                        <td>Sänkt - Passar korta och normallånga</td>
+                        <td>Hög - Passar långa personer</td>
+                    </tr>
+                    <!-- Kostnad för milsträcka -->
+                    <tr>
+                        <td><strong>Kostnad för milsträcka</strong></td>
+                        <td>Fria gratis mil</td>
+                        <td>3 mil/dag, därefter 15kr/mil</td>
+                        <td>Fria gratis mil</td>
+                    </tr>
+                    <!-- ABS -->
+                    <tr>
+                        <td><strong>ABS</strong></td>
+                        <td>ej ABS</td>
+                        <td>ABS</td>
+                        <td>ej ABS</td>
+                    </tr>
+                    <!-- Price -->
+                    <tr>
+                        <td><strong>Pris</strong></td>
+                        <td>1100 kr/dag</td>
+                        <td>1400 kr/dag</td>
+                        <td>1300 kr/dag</td>
+                    </tr>
+                    <!-- Booking Button -->
+                    <tr>
+                        <td></td>
+                        <td>
+                            <a href="/create/" class="book-button">Boka Nu</a>
+                        </td>
+                        <td>
+                            <a href="/create/" class="book-button">Boka Nu</a>
+                        </td>
+                        <td>
+                            <a href="/create/" class="book-button">Boka Nu</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
-        <!-- Comparison Table -->
-        <h2>Jämför motorcyklarnas egenskaper</h2>
-        <table class="comparison-table">
-            <thead>
-                <tr>
-                    <th>Funktion</th>
-                    <th>Suzuki Bandit GSF 600</th>
-                    <th>Suzuki Bandit GSF 650</th>
-                    <th>Honda Varadero XL 1000</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Motorvolym</td>
-                    <td>600cc</td>
-                    <td>650cc</td>
-                    <td>1000cc</td>
-                </tr>
-                <tr>
-                    <td>MC-klass för uppkörning</td>
-                    <td>A - Tung MC</td>
-                    <td>A - Tung MC</td>
-                    <td>A - Tung MC</td>
-                </tr>
-                <tr>
-                    <td>Sadelhöjd</td>
-                    <td>Standard - Passar alla</td>
-                    <td>Sänkt - Passar korta och normallånga personer</td>
-                    <td>Hög - Passar långa personer</td>
-                </tr>
-                <tr>
-                    <td>Kostnad för milsträcka</td>
-                    <td>Fria mil</td>
-                    <td>3 mil/ dag, därefter 15kr/mil</td>
-                    <td>Fria mil</td>
-                </tr>
-                <tr>
-                    <td>ABS</td>
-                    <td>ej ABS</td>
-                    <td>ABS</td>
-                    <td>ej ABS</td>
-                </tr>
-            </tbody>
-        </table>
     </section>
     {% endblock %}
 </body>
