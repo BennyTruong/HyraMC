@@ -1,5 +1,3 @@
-<!-- bookings/templates/bookings/create_booking.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,62 +16,36 @@
 
     <!-- Style the form using Flexbox -->
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
         h1, h2, h3 {
-            text-align: center;  /* Center all h1, h2, h3 elements */
-            margin-bottom: 20px;  /* Add spacing below the headings */
-        }
-        
-        /* Style for timeslot boxes */
-        .timeslot-container input[type="radio"] {
-            display: none;  /* Hide the actual radio buttons */
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
         }
 
-        .timeslot-container label {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Style for the selected timeslot */
-        .timeslot-container input[type="radio"]:checked + label {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
-
-        /* Hover effect */
-        .timeslot-container label:hover {
-            background-color: #f0f0f0;
-        }
-       
-        /* Main container with two columns */
         .container {
             display: grid;
-            grid-template-columns: 2fr 1fr;  /* Left for form, right for details */
+            grid-template-columns: 2fr 1fr;
             gap: 20px;
             max-width: 1200px;
             margin: 50px auto;
             padding: 20px;
         }
 
-        /* Left side: Booking form */
-        .form-container {
+        .form-container, .details-container {
             background-color: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Right side: Details/Images */
         .details-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -91,12 +63,6 @@
             color: #333;
         }
 
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
         .booking-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -104,7 +70,7 @@
         }
 
         .booking-form div {
-            flex: 1 1 45%;  /* Flex to control width of each item */
+            flex: 1 1 45%;
         }
 
         label {
@@ -112,20 +78,20 @@
             font-weight: bold;
         }
 
-        input, select {
+        input, select, textarea {
             padding: 10px;
             font-size: 1rem;
             border-radius: 5px;
             border: 1px solid #ddd;
+            width: 100%;
         }
 
         .full-width {
-            flex: 1 1 100%;  /* Make field take the full width */
+            grid-column: span 2;
         }
 
         .submit-btn {
             margin-top: 20px;
-            flex: 1 1 100%;  /* Make submit button take full width */
             padding: 15px;
             background-color: #007bff;
             color: white;
@@ -134,30 +100,34 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            width: 100%;
         }
 
         .submit-btn:hover {
             background-color: #0056b3;
         }
 
-        /* Add your custom styles here */
-        textarea {
-            font-size: 1rem;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        /* Responsive for mobile */
         @media screen and (max-width: 768px) {
             .container {
-                grid-template-columns: 1fr;  /* Stack form and details vertically */
+                grid-template-columns: 1fr;
             }
 
             .details-container {
                 margin-top: 20px;
             }
+        }
 
+        .details-container .spacer {
+            margin-top: 20px;
+        }
+
+        .form-container img {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 500px; /* Adjust the max-width as needed */
+            border-radius: 10px;
+        }
     </style>
 
 </head>
@@ -170,8 +140,6 @@
             <h1>Boka din motorcykel</h1>
             <form method="post" class="booking-form">
                 {% csrf_token %}
-            <!--    {{ form.as_p }}   Includes the motorcycle dropdown -->
-            
                 <div>
                     <label for="id_first_name">Förnamn:</label>
                     {{ form.first_name }}
@@ -197,58 +165,61 @@
                     {{ form.service }}
                 </div>
                 <div class="full-width">
-                    <label for="id_booking_date">Datum för hyra:</label>
-                    {{ form.booking_date }}
+                    <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Suzuki Bandit GSF 650">
                 </div>
-                <linebreaks>
-
-                <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Suzuki Bandit GSF 650">
-                <p>Boka din motorcykel för antingen uppkörning av A-kort eller nöjeskörning för en dag.</p>
-
+                <div class="full-width">
+                    <p>Boka din motorcykel för antingen uppkörning av A-kort eller nöjeskörning för en dag.</p>
+                </div>
+                <div class="full-width">
+                    <label for="booking_message">Bokningsmeddelande:</label>
+                    {{ form.booking_message }}
+                </div>
+                                <button type="submit" class="submit-btn">Boka</button>
             </form>
         </div>    
 
         <!-- Right: Additional Details/Images -->
         <div class="details-container">
-            <!-- Timeslot selection for Pickup -->
-            <h3>Välj tid för upphämtning:</h3><linebreaks>
-            <div class="timeslot-container">
+            <h3>Välj datum som du vill boka:</h3>
+            <div class="spacer"></div>
+            <div id="datepicker"></div>
+            <div class="spacer"></div>
+            <div class="full-width">
+                <label for="id_booking_date">Datum för hyra:</label>
+                <input type="text" id="booking_date" name="booking_date">
+            </div>
+            <div class="spacer"></div>
+            <h3>Välj tid för upphämtning:</h3>
+            <select name="pickup_time">
                 {% for timeslot in pickup_timeslots %}
-                    <input type="radio" id="pickup_{{ forloop.counter }}" name="pickup_time" value="{{ timeslot }}">
-                    <label for="pickup_{{ forloop.counter }}">{{ timeslot }}</label>
+                    <option value="{{ timeslot }}">{{ timeslot }}</option>
                 {% endfor %}
-            </div>
-
-            <!-- Timeslot selection for Dropoff -->
-            <h3>Välj tid för avlämning:</h3><linebreaks>
-            <div class="timeslot-container">
+            </select>
+            <div class="spacer"></div>
+            <h3>Välj tid för avlämning:</h3>
+            <select name="dropoff_time">
                 {% for timeslot in dropoff_timeslots %}
-                    <input type="radio" id="dropoff_{{ forloop.counter }}" name="dropoff_time" value="{{ timeslot }}">
-                    <label for="dropoff_{{ forloop.counter }}">{{ timeslot }}</label>
+                    <option value="{{ timeslot }}">{{ timeslot }}</option>
                 {% endfor %}
-            </div>
-            
-            <button type="submit">Boka</button>
-        </div>
-
-        <div class="full-width">
-            <label for="booking_message">Bokningsmeddelande:</label>
-            {{ form.booking_message }}  <!-- Render the textarea field for comments -->
+            </select>
         </div>
     </div>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             flatpickr("#datepicker", {
                 inline: true,
-                dateFormat: "d-m-Y",  // Format the date as required by Django
-                altInput: true,
-                altFormat: "j F, Y",  // Optional: Display a user-friendly format
+                dateFormat: "d-m-Y",
+                altInput: false,
+                altInputClass: "form-control",
+                altFormat: "j F, Y",
                 allowInput: true,
                 showMonths: 1,
                 defaultDate: null,
-                enableTime: false
+                enableTime: false,
+                onChange: function(selectedDates, dateStr, instance) {
+                    document.getElementById('booking_date').value = dateStr;
+                }
             });
         });
     </script>
