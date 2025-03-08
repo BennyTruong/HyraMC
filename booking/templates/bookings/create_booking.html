@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Flatpickr Swedish Locale -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/sv.js"></script>
 
     <!-- Style the form using Flexbox -->
     <style>
@@ -174,7 +176,8 @@
                     <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Suzuki Bandit GSF 650">
                 </div>
                 <div class="full-width">
-                    <p>Boka din motorcykel för antingen uppkörning av A-kort eller nöjeskörning för en dag.</p>
+                    <p>Boka din motorcykel för antingen uppkörning av A-kort eller nöjeskörning för en dag.<br> 
+                        Motorcykeln hämtas och lämnas fulltankad (Bensin).</p>
                 </div>
                 <div class="full-width">
                     <label for="booking_message">Bokningsmeddelande:</label>
@@ -220,6 +223,7 @@
             flatpickr("#datepicker", {
                 inline: true,
                 dateFormat: "d-m-Y",
+                locale: "sv", // Set the locale to Swedish
                 altInput: false,
                 altInputClass: "form-control",
                 altFormat: "j F, Y",
@@ -227,6 +231,7 @@
                 showMonths: 1,
                 defaultDate: null,
                 enableTime: false,
+                firstDayOfWeek: 1, // Start the week on Monday
                 onChange: function(selectedDates, dateStr, instance) {
                     document.getElementById('booking_date').value = dateStr;
                 }
