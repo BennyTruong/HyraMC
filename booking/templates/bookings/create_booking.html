@@ -194,7 +194,7 @@
             <div class="spacer"></div>
             <div class="full-width">
                 <label for="id_booking_date">Datum för hyra:</label>
-                <input type="text" id="booking_date" name="booking_date">
+                <input type="text" id="booking_date" name="booking_date" readonly>
             </div>
             <div class="spacer"></div>
             <h3>Välj tid för upphämtning:</h3>
@@ -227,11 +227,12 @@
                 altInput: false,
                 altInputClass: "form-control",
                 altFormat: "j F, Y",
-                allowInput: true,
+                allowInput: false,
                 showMonths: 1,
                 defaultDate: null,
                 enableTime: false,
                 firstDayOfWeek: 1, // Start the week on Monday
+                minDate: "today", // Disable past dates
                 onChange: function(selectedDates, dateStr, instance) {
                     document.getElementById('booking_date').value = dateStr;
                 }
