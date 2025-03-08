@@ -41,8 +41,8 @@ def generate_timeslots(start_time, end_time, interval_minutes=60):
     return timeslots
 
 def create_booking(request):
-    pickup_timeslots = generate_timeslots(time(9, 0), time(17, 0), 30)  # 9 AM to 5 PM for pickup
-    dropoff_timeslots = generate_timeslots(time(9, 0), time(17, 0), 30)  # Same range for dropoff
+    pickup_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # 9 AM to 5 PM for pickup
+    dropoff_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # Same range for dropoff
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
