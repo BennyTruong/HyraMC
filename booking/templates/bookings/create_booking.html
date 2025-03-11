@@ -173,7 +173,10 @@
                     {{ form.service }}
                 </div>
                 <div class="full-width">
-                    <img src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg?format=webp&quality=80&width=380&height=250&bgcolor=rgba_39_42_44_0&mode=pad" alt="Suzuki Bandit GSF 650">
+                    <img id="motorcycle-image" 
+                         src="https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg" 
+                         alt="Selected Motorcycle" 
+                         class="motorcycle-preview">
                 </div>
                 <div class="full-width">
                     <p>Boka din motorcykel för antingen uppkörning av A-kort eller nöjeskörning för en dag.<br> 
@@ -217,6 +220,46 @@
             <button type="submit" class="submit-btn">Boka</button>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the motorcycle select element from the Django form
+            const motorcycleSelect = document.querySelector('#id_motorcycle');
+            const motorcycleImage = document.querySelector('#motorcycle-image');
+    
+            console.log('Motorcycle select:', motorcycleSelect);
+            console.log('Motorcycle image:', motorcycleImage);
+    
+            // Define the motorcycle images mapping
+            const motorcycleImages = {
+                '1': 'https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg', // GSF600
+                '2': 'https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg', // GSF650
+                '3': 'https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg' // XL1000
+            };
+    
+            // Function to update the motorcycle image
+            function updateMotorcycleImage(selectedValue) {
+                console.log('Selected motorcycle ID:', selectedValue);
+                if (motorcycleImages[selectedValue]) {
+                    motorcycleImage.src = motorcycleImages[selectedValue];
+                    const motorcycleName = motorcycleSelect.options[motorcycleSelect.selectedIndex].text;
+                    motorcycleImage.alt = motorcycleName;
+                    console.log('Updated image for:', motorcycleName);
+                }
+            }
+    
+            // Set initial image if a motorcycle is pre-selected
+            if (motorcycleSelect && motorcycleImage) {
+                const initialSelection = motorcycleSelect.value;
+                updateMotorcycleImage(initialSelection);
+    
+                // Add change event listener
+                motorcycleSelect.addEventListener('change', function(event) {
+                    updateMotorcycleImage(this.value);
+                });
+            }
+        });
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
