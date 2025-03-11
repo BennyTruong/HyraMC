@@ -85,7 +85,6 @@ def create_booking(request):
                 return redirect('booking_success')
 
             except ValueError as e:
-                logger.error(f"Date parsing error: {str(e)}")
                 messages.error(request, 'Ogiltigt datum eller tidsformat.')
                 return render(request, 'bookings/create_booking.html', context)
     else:
