@@ -193,7 +193,18 @@
         <div class="details-container">
             <h3>Välj datum som du vill boka:</h3>
             <div class="spacer"></div>
-            <div id="datepicker"></div>
+            
+            <!-- Calendar containers for each motorcycle -->
+            <div id="calendar-GSF600" class="motorcycle-calendar" style="display: none;">
+                <div class="datepicker-gsf600"></div>
+            </div>
+            <div id="calendar-GSF650" class="motorcycle-calendar" style="display: none;">
+                <div class="datepicker-gsf650"></div>
+            </div>
+            <div id="calendar-XL1000" class="motorcycle-calendar" style="display: none;">
+                <div class="datepicker-xl1000"></div>
+            </div>
+            
             <div class="spacer"></div>
             <div class="full-width">
                 <label for="id_booking_date">Datum för hyra:</label>
@@ -223,65 +234,116 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the motorcycle select element from the Django form
+            // Debug elements
             const motorcycleSelect = document.querySelector('#id_motorcycle');
             const motorcycleImage = document.querySelector('#motorcycle-image');
-    
-            console.log('Motorcycle select:', motorcycleSelect);
-            console.log('Motorcycle image:', motorcycleImage);
-    
+            const bookingDateInput = document.getElementById('booking_date');
+            
+            console.log('Elements found:', {
+                motorcycleSelect,
+                motorcycleImage,
+                bookingDateInput
+            });
+        
+            // Get booked dates from Django context with error handling
+            let bookedDates = {};
+            try {
+                bookedDates = JSON.parse('{{ booked_dates|escapejs|safe }}');
+                console.log('Successfully parsed booked dates:', bookedDates);
+            } catch (e) {
+                console.error('Error parsing booked dates:', e);
+            }
+        
             // Define the motorcycle images mapping
             const motorcycleImages = {
-                '1': 'https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg', // GSF600
-                '2': 'https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg', // GSF650
-                '3': 'https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg' // XL1000
+                '1': 'https://images5.1000ps.net/images_bikekat/2017/3-SUZUKI/1767-Bandit_650S_ABS/1.jpg',
+                '2': 'https://www.motorcyclespecs.co.za/Gallery%20%20A/Suzuki%20GSF%20600S%20Bandit%2000%20%201.jpg',
+                '3': 'https://fooqs.com/environment/cache/images/0_0_productGfx_36970/Honda-XL-1000-V-Varadero-2007-2009-red-R319-fooqs-motorcycle-decals-aufkleber-oem-autocollants-adesivi-naklejki-nalepky-adhesivos-nalepky.jpg'
             };
-    
-            // Function to update the motorcycle image
-            function updateMotorcycleImage(selectedValue) {
-                console.log('Selected motorcycle ID:', selectedValue);
+        
+            // Map motorcycle IDs to calendar IDs - make sure these match your database IDs
+            const motorcycleToCalendarId = {
+                '1': 'GSF650',  // ID 1 = GSF600
+                '2': 'GSF600',  // ID 2 = GSF650
+                '3': 'XL1000'   // ID 3 = XL1000
+            };
+        
+            // Initialize calendars with debug logging
+            const calendars = {};
+            Object.entries(motorcycleToCalendarId).forEach(([id, model]) => {
+                const calendarSelector = `#calendar-${model} .datepicker-${model.toLowerCase()}`;
+                const calendarElement = document.querySelector(calendarSelector);
+                console.log(`Initializing calendar for ${model}:`, {
+                    selector: calendarSelector,
+                    element: calendarElement,
+                    bookedDates: bookedDates[id]
+                });
+        
+                if (calendarElement) {
+                    calendars[id] = flatpickr(calendarElement, {
+                        inline: true,
+                        dateFormat: "Y-m-d",
+                        locale: "sv",
+                        altInput: true,
+                        altFormat: "j F Y",
+                        minDate: "today",
+                        disable: bookedDates[id] || [],
+                        onChange: function(selectedDates, dateStr) {
+                            bookingDateInput.value = dateStr;
+                            console.log('Date selected:', dateStr);
+                        }
+                    });
+                }
+            });
+        
+            // Function to update motorcycle selection
+            function updateMotorcycleSelection(selectedValue) {
+                console.log('Updating selection for:', selectedValue);
+        
+                // Update image
                 if (motorcycleImages[selectedValue]) {
                     motorcycleImage.src = motorcycleImages[selectedValue];
-                    const motorcycleName = motorcycleSelect.options[motorcycleSelect.selectedIndex].text;
-                    motorcycleImage.alt = motorcycleName;
-                    console.log('Updated image for:', motorcycleName);
+                    motorcycleImage.alt = motorcycleSelect.options[motorcycleSelect.selectedIndex].text;
+                    console.log('Updated image for:', motorcycleSelect.options[motorcycleSelect.selectedIndex].text);
                 }
+        
+                // Hide all calendars first
+                document.querySelectorAll('.motorcycle-calendar').forEach(cal => {
+                    cal.style.display = 'none';
+                });
+        
+                // Show selected calendar
+                const calendarId = motorcycleToCalendarId[selectedValue];
+                if (calendarId) {
+                    const selectedCalendar = document.getElementById(`calendar-${calendarId}`);
+                    if (selectedCalendar) {
+                        selectedCalendar.style.display = 'block';
+                        console.log('Showing calendar:', calendarId);
+                    } else {
+                        console.error('Calendar not found for:', calendarId);
+                    }
+                }
+        
+                // Clear booking date
+                bookingDateInput.value = '';
             }
-    
-            // Set initial image if a motorcycle is pre-selected
-            if (motorcycleSelect && motorcycleImage) {
+        
+            // Set up event listeners
+            if (motorcycleSelect) {
+                // Set initial state
                 const initialSelection = motorcycleSelect.value;
-                updateMotorcycleImage(initialSelection);
-    
-                // Add change event listener
+                console.log('Initial motorcycle selection:', initialSelection);
+                if (initialSelection) {
+                    updateMotorcycleSelection(initialSelection);
+                }
+        
+                // Add change listener
                 motorcycleSelect.addEventListener('change', function(event) {
-                    updateMotorcycleImage(this.value);
+                    updateMotorcycleSelection(event.target.value);
                 });
             }
         });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#datepicker", {
-                inline: true,
-                dateFormat: "d-m-Y",
-                locale: "sv", // Set the locale to Swedish
-                altInput: false,
-                altInputClass: "form-control",
-                altFormat: "j F, Y",
-                allowInput: false,
-                showMonths: 1,
-                defaultDate: null,
-                enableTime: false,
-                firstDayOfWeek: 1, // Start the week on Monday
-                minDate: "today", // Disable past dates
-                onChange: function(selectedDates, dateStr, instance) {
-                    document.getElementById('booking_date').value = dateStr;
-                }
-            });
-        });
-    </script>
+        </script>
 
     {% endblock %}
 </body>

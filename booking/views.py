@@ -1,23 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import BookingForm, ContactForm, ReviewForm
-from .models import Booking, ContactMessage, Review
+from .models import Booking, ContactMessage, Review, Motorcycle
 from datetime import datetime, time, timedelta, date
 from django.core.mail import send_mail
+import json
 
 def home(request):
     reviews = Review.objects.filter(is_approved=True).order_by('-created_at')  # Only get approved reviews
     return render(request, 'bookings/home.html', {'reviews': reviews})
-
-def create_booking(request):
-    if request.method == 'POST':
-        form = BookingForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('booking_success')
-    else:
-        form = BookingForm()
-    return render(request, 'bookings/create_booking.html', {'form': form})
 
 def price(request):
     return render(request, 'bookings/price.html')
@@ -40,21 +31,60 @@ def generate_timeslots(start_time, end_time, interval_minutes=60):
         current_time = (datetime.combine(date.today(), current_time) + timedelta(minutes=interval_minutes)).time()
     return timeslots
 
+def get_booked_dates_for_motorcycle(motorcycle_id):
+    # Get all active bookings for this motorcycle
+    bookings = Booking.objects.filter(
+        motorcycle_id=motorcycle_id,
+        booking_date__gte=datetime.now().date(),
+        status__in=['PENDING', 'CONFIRMED']
+    ).values_list('booking_date', flat=True)
+    
+    # Convert dates to string format
+    return [booking.strftime('%Y-%m-%d') for booking in bookings]
+
+
 def create_booking(request):
     pickup_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # 9 AM to 5 PM for pickup
     dropoff_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # Same range for dropoff
+    
+    # Get all motorcycles
+    motorcycles = Motorcycle.objects.all()
+    
+    # Get booked dates for each motorcycle
+    booked_dates = {}
+    for motorcycle in motorcycles:
+        booked_dates[str(motorcycle.id)] = get_booked_dates_for_motorcycle(motorcycle.id)
+    
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('booking_success')
+            # Check if the selected date is available
+            selected_date = form.cleaned_data['booking_date']
+            selected_motorcycle = form.cleaned_data['motorcycle']
+            
+            # Convert selected_date to string format for comparison
+            date_str = selected_date.strftime('%Y-%m-%d')
+            
+            if date_str in booked_dates.get(str(selected_motorcycle.id), []):
+                form.add_error('booking_date', 'This date is already booked for the selected motorcycle.')
+            else:
+                form.save()
+                return redirect('booking_success')
     else:
         form = BookingForm()
-    return render(request, 'bookings/create_booking.html', {
-        'form': form, 
+
+    context = {
+        'form': form,
         'pickup_timeslots': pickup_timeslots,
-        'dropoff_timeslots': dropoff_timeslots
-    })
+        'dropoff_timeslots': dropoff_timeslots,
+        'booked_dates': json.dumps(booked_dates),  # Serialize the dates to JSON
+        'motorcycles': {str(m.id): {
+            'model': m.model,
+            'booked_dates': booked_dates[str(m.id)]
+        } for m in motorcycles}
+    }
+
+    return render(request, 'bookings/create_booking.html', context)  # Return the full context
 
 
 def contact_submit(request):
