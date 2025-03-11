@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .forms import BookingForm, ContactForm, ReviewForm
 from .models import Booking, ContactMessage, Review, Motorcycle
 from datetime import datetime, time, timedelta, date
-from django.core.mail import send_mail
+from django.contrib import messages
 import json
 
 def home(request):
@@ -42,7 +42,6 @@ def get_booked_dates_for_motorcycle(motorcycle_id):
     # Convert dates to string format
     return [booking.strftime('%Y-%m-%d') for booking in bookings]
 
-
 def create_booking(request):
     pickup_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # 9 AM to 5 PM for pickup
     dropoff_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # Same range for dropoff
@@ -58,18 +57,37 @@ def create_booking(request):
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
-            # Check if the selected date is available
-            selected_date = form.cleaned_data['booking_date']
-            selected_motorcycle = form.cleaned_data['motorcycle']
-            
-            # Convert selected_date to string format for comparison
-            date_str = selected_date.strftime('%Y-%m-%d')
-            
-            if date_str in booked_dates.get(str(selected_motorcycle.id), []):
-                form.add_error('booking_date', 'This date is already booked for the selected motorcycle.')
-            else:
-                form.save()
+            try:
+                # Get the date and time values
+                booking_date = request.POST.get('booking_date')
+                pickup_time = request.POST.get('pickup_time')
+                dropoff_time = request.POST.get('dropoff_time')
+
+                if not all([booking_date, pickup_time, dropoff_time]):
+                    messages.error(request, 'Vänligen fyll i alla obligatoriska fält.')
+                    return render(request, 'bookings/create_booking.html', context)
+
+                # Create booking but don't save yet
+                booking = form.save(commit=False)
+                
+                try:
+                    # Convert string dates to proper datetime objects
+                    booking.booking_date = datetime.strptime(booking_date, '%Y-%m-%d').date()
+                    booking.pickup_time = datetime.strptime(pickup_time, '%H:%M').time()
+                    booking.dropoff_time = datetime.strptime(dropoff_time, '%H:%M').time()
+                except ValueError as e:
+                    messages.error(request, 'Ogiltigt datum eller tidsformat.')
+                    return render(request, 'bookings/create_booking.html', context)
+                
+                # Save the booking
+                booking.save()
+                messages.success(request, 'Bokning skapad!')
                 return redirect('booking_success')
+
+            except ValueError as e:
+                logger.error(f"Date parsing error: {str(e)}")
+                messages.error(request, 'Ogiltigt datum eller tidsformat.')
+                return render(request, 'bookings/create_booking.html', context)
     else:
         form = BookingForm()
 
@@ -77,7 +95,7 @@ def create_booking(request):
         'form': form,
         'pickup_timeslots': pickup_timeslots,
         'dropoff_timeslots': dropoff_timeslots,
-        'booked_dates': json.dumps(booked_dates),  # Serialize the dates to JSON
+        'booked_dates': json.dumps(booked_dates),
         'motorcycles': {str(m.id): {
             'model': m.model,
             'booked_dates': booked_dates[str(m.id)]
@@ -92,15 +110,7 @@ def contact_submit(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()  # Save the message to the database
-
-            # Send an email notification
-            send_mail(
-                subject=f"New Contact Form Submission from {form.cleaned_data['name']}",
-                message=f"Message: {form.cleaned_data['message']}\nPhone: {form.cleaned_data['phone']}\nEmail: {form.cleaned_data['email']}",
-                from_email=form.cleaned_data['email'],
-                recipient_list=['benny@hotmail.se'],
-            )
-
+            
             return redirect('contact_success')  # Redirect to a success page or message
     else:
         form = ContactForm()

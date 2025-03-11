@@ -6,9 +6,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Successful</title>
+
+    <!-- Menu -->
+    {% extends 'bookings/base.html' %}
+    {% block title %}Bokning{% endblock %}
+    {% block content %}   
+
+    <style>
+        .success-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        .success-message {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+        }
+    
+        .action-buttons {
+            margin-top: 20px;
+        }
+    
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f4a261;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+    
+        .btn:hover {
+            background-color: #c44127;
+        }
+    
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    
+        .success {
+            background-color: #c8e6c9;
+            color: #2e7d32;
+        }
+    </style>
+
 </head>
 <body>
-    <h1>Your booking has been submitted successfully!</h1>
-    <a href="{% url 'create_booking' %}">Book another service</a>
+    <div class="success-container">
+        <h1>Tack för din bokning!</h1>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class="success-message">
+            <p>Vi har mottagit din bokning och kommer att kontakta dig inom kort.</p>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'home' %}" class="btn">Tillbaka till startsidan</a>
+        </div>
+    </div>
+    
+    {% endblock %}
 </body>
 </html>

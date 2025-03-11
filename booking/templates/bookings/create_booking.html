@@ -158,11 +158,11 @@
                 </div>
                 <div>
                     <label for="id_phone_number">Telefon:</label>
-                    {{ form.email }}
+                    {{ form.phone_number }}
                 </div>
                 <div>
                     <label for="id_email">E-mail:</label>
-                    {{ form.phone_number }}
+                    {{ form.email }}
                 </div>
                 <div class="full-width">
                     <label for="id_motorcycle">Motorcykel:</label>
@@ -186,50 +186,52 @@
                     <label for="booking_message">Bokningsmeddelande:</label>
                     {{ form.booking_message }}
                 </div>
-            </form>
+            
         </div>    
 
-        <!-- Right: Additional Details/Images -->
-        <div class="details-container">
-            <h3>Välj datum som du vill boka:</h3>
-            <div class="spacer"></div>
-            
-            <!-- Calendar containers for each motorcycle -->
-            <div id="calendar-GSF600" class="motorcycle-calendar" style="display: none;">
-                <div class="datepicker-gsf600"></div>
+            <!-- Right: Additional Details/Images -->
+            <div class="details-container">
+                <h3>Välj datum som du vill boka:</h3>
+                <div class="spacer"></div>
+                
+                <!-- Calendar containers for each motorcycle -->
+                <div id="calendar-GSF600" class="motorcycle-calendar" style="display: none;">
+                    <div class="datepicker-gsf600"></div>
+                </div>
+                <div id="calendar-GSF650" class="motorcycle-calendar" style="display: none;">
+                    <div class="datepicker-gsf650"></div>
+                </div>
+                <div id="calendar-XL1000" class="motorcycle-calendar" style="display: none;">
+                    <div class="datepicker-xl1000"></div>
+                </div>
+                
+                <div class="spacer"></div>
+                <div class="full-width">
+                    <label for="id_booking_date">Datum för hyra:</label>
+                    <input type="text" id="booking_date" name="booking_date" readonly>
+                </div>
+                <div class="spacer"></div>
+                <h3>Välj tid för upphämtning:</h3>
+                <select name="pickup_time">
+                    {% for timeslot in pickup_timeslots %}
+                        <option value="{{ timeslot }}">{{ timeslot }}</option>
+                    {% endfor %}
+                </select>
+                <div class="spacer"></div>
+                <h3>Välj tid för avlämning:</h3>
+                <select name="dropoff_time">
+                    {% for timeslot in dropoff_timeslots %}
+                        <option value="{{ timeslot }}">{{ timeslot }}</option>
+                    {% endfor %}
+                </select>
+                <div class="spacer"></div>
+                <div>
+                    <label>Pris:</label>
+                </div>
+
+                <button type="submit" class="submit-btn">Boka</button>
             </div>
-            <div id="calendar-GSF650" class="motorcycle-calendar" style="display: none;">
-                <div class="datepicker-gsf650"></div>
-            </div>
-            <div id="calendar-XL1000" class="motorcycle-calendar" style="display: none;">
-                <div class="datepicker-xl1000"></div>
-            </div>
-            
-            <div class="spacer"></div>
-            <div class="full-width">
-                <label for="id_booking_date">Datum för hyra:</label>
-                <input type="text" id="booking_date" name="booking_date" readonly>
-            </div>
-            <div class="spacer"></div>
-            <h3>Välj tid för upphämtning:</h3>
-            <select name="pickup_time">
-                {% for timeslot in pickup_timeslots %}
-                    <option value="{{ timeslot }}">{{ timeslot }}</option>
-                {% endfor %}
-            </select>
-            <div class="spacer"></div>
-            <h3>Välj tid för avlämning:</h3>
-            <select name="dropoff_time">
-                {% for timeslot in dropoff_timeslots %}
-                    <option value="{{ timeslot }}">{{ timeslot }}</option>
-                {% endfor %}
-            </select>
-            <div class="spacer"></div>
-            <div>
-                <label>Pris:</label>
-            </div>
-            <button type="submit" class="submit-btn">Boka</button>
-        </div>
+        </form>
     </div>
 
     <script>
@@ -289,8 +291,8 @@
                         minDate: "today",
                         disable: bookedDates[id] || [],
                         onChange: function(selectedDates, dateStr) {
-                            bookingDateInput.value = dateStr;
-                            console.log('Date selected:', dateStr);
+                            document.getElementById('booking_date').value = dateStr;
+                            document.getElementById('booking_date_display').value = flatpickr.formatDate(selectedDates[0], "j F Y");
                         }
                     });
                 }
@@ -343,6 +345,38 @@
                 });
             }
         });
+
+        document.querySelector('.booking-form').addEventListener('submit', function(e) {
+            // Get the values
+            const bookingDate = document.getElementById('booking_date').value;
+            const pickupTime = document.querySelector('select[name="pickup_time"]').value;
+            const dropoffTime = document.querySelector('select[name="dropoff_time"]').value;
+
+            // Validate required fields
+            if (!bookingDate) {
+                e.preventDefault();
+                alert('Vänligen välj ett datum för bokningen.');
+                return false;
+            }
+
+            if (!pickupTime || !dropoffTime) {
+                e.preventDefault();
+                alert('Vänligen välj tider för upphämtning och avlämning.');
+                return false;
+            }
+
+            // Update hidden fields
+            document.getElementById('booking_date').value = bookingDate;
+            document.getElementById('pickup_time').value = pickupTime;
+            document.getElementById('dropoff_time').value = dropoffTime;
+
+            // Submit the form
+            this.submit();
+
+            // Allow form submission to proceed
+           // return true;
+        });
+
         </script>
 
     {% endblock %}
