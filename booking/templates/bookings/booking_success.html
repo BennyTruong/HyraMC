@@ -58,6 +58,19 @@
             background-color: #c8e6c9;
             color: #2e7d32;
         }
+
+        .pending-notice {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            border-radius: 4px;
+        }
+        
+        .pending-notice p {
+            margin: 0;
+            color: #e65100;
+        }
     </style>
 
 </head>
@@ -77,6 +90,14 @@
         
         <div class="success-message">
             <p>Vi har mottagit din bokning och kommer att kontakta dig inom kort.</p>
+        
+            {% if has_pending %}
+            <div class="pending-notice">
+                <p>Obs! Det finns redan en väntande bokning av någon annan för detta datum. 
+                Din bokning har sparats och kommer att granskas av vår personal.</p>
+            </div>
+            {% endif %}
+
         </div>
         
         <div class="action-buttons">

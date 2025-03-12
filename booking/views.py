@@ -17,7 +17,10 @@ def contact(request):
     return render(request, 'bookings/contact.html')
 
 def booking_success(request):
-    return render(request, 'bookings/booking_success.html')
+    has_pending = request.session.pop('has_pending', False)
+    return render(request, 'bookings/booking_success.html', {
+        'has_pending': has_pending
+    })
 
 def booking_list(request):
     bookings = Booking.objects.all()
@@ -36,7 +39,7 @@ def get_booked_dates_for_motorcycle(motorcycle_id):
     bookings = Booking.objects.filter(
         motorcycle_id=motorcycle_id,
         booking_date__gte=datetime.now().date(),
-        status__in=['PENDING', 'CONFIRMED']
+        status__in=['CONFIRMED']
     ).values_list('booking_date', flat=True)
     
     # Convert dates to string format
@@ -62,10 +65,18 @@ def create_booking(request):
                 booking_date = request.POST.get('booking_date')
                 pickup_time = request.POST.get('pickup_time')
                 dropoff_time = request.POST.get('dropoff_time')
+                motorcycle_id = request.POST.get('motorcycle')
 
                 if not all([booking_date, pickup_time, dropoff_time]):
                     messages.error(request, 'Vänligen fyll i alla obligatoriska fält.')
                     return render(request, 'bookings/create_booking.html', context)
+
+                # Check for pending bookings
+                pending_booking = Booking.objects.filter(
+                    motorcycle_id=motorcycle_id,
+                    booking_date=datetime.strptime(booking_date, '%Y-%m-%d').date(),
+                    status='PENDING'
+                ).exists()
 
                 # Create booking but don't save yet
                 booking = form.save(commit=False)
@@ -81,6 +92,10 @@ def create_booking(request):
                 
                 # Save the booking
                 booking.save()
+                
+                # Store pending status in session
+                request.session['has_pending'] = pending_booking
+
                 messages.success(request, 'Bokning skapad!')
                 return redirect('booking_success')
 
