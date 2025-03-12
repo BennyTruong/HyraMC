@@ -65,7 +65,8 @@ def create_booking(request):
             'model': m.model,
             'price_rent_1d': m.price_rent_1d,
             'price_practise_1d': m.price_practise_1d,
-            'price_test': m.price_test
+            'price_test': m.price_test,
+            'available': m.availability_status
         } for m in motorcycles
     }
 

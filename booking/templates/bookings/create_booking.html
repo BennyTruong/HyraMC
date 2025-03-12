@@ -149,6 +149,13 @@
             max-width: 500px; /* Adjust the max-width as needed */
             border-radius: 10px;
         }
+
+        select option:disabled {
+            background-color: #f0f0f0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
     </style>
 
 </head>
@@ -179,7 +186,16 @@
                 </div>
                 <div class="full-width">
                     <label for="id_motorcycle">Motorcykel:</label>
-                    {{ form.motorcycle }}
+                    <select name="motorcycle" id="id_motorcycle" required>
+                        <option value="">Välj motorcykel</option>
+                        {% for motorcycle in motorcycles %}
+                            <option value="{{ motorcycle.id }}" 
+                                    {% if not motorcycle.availability_status %}disabled="disabled"{% endif %}>
+                                {{ motorcycle.model }}
+                                {% if not motorcycle.availability_status %}(Inte tillgänglig just nu){% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="full-width">
                     <label for="id_service">Hyrning:</label>
@@ -331,7 +347,7 @@
                 const serviceSelect = document.querySelector('#id_service');
                 const priceElement = document.querySelector('#price-value');
                 console.log('Updating selection for:', selectedValue);
-        
+               
                 // Update image
                 if (motorcycleImages[selectedValue]) {
                     motorcycleImage.src = motorcycleImages[selectedValue];
@@ -414,7 +430,7 @@
             const bookingDate = document.getElementById('booking_date').value;
             const pickupTime = document.querySelector('select[name="pickup_time"]').value;
             const dropoffTime = document.querySelector('select[name="dropoff_time"]').value;
-
+            
             // Validate required fields
             if (!bookingDate) {
                 e.preventDefault();
