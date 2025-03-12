@@ -4,6 +4,7 @@ from .forms import BookingForm, ContactForm, ReviewForm
 from .models import Booking, ContactMessage, Review, Motorcycle
 from datetime import datetime, time, timedelta, date
 from django.contrib import messages
+from django.core.serializers.json import DjangoJSONEncoder
 import json
 
 def home(request):
@@ -11,7 +12,8 @@ def home(request):
     return render(request, 'bookings/home.html', {'reviews': reviews})
 
 def price(request):
-    return render(request, 'bookings/price.html')
+    motorcycles = Motorcycle.objects.all().order_by('id')
+    return render(request, 'bookings/price.html', {'motorcycles': motorcycles})
 
 def contact(request):
     return render(request, 'bookings/contact.html')
@@ -57,6 +59,16 @@ def create_booking(request):
     for motorcycle in motorcycles:
         booked_dates[str(motorcycle.id)] = get_booked_dates_for_motorcycle(motorcycle.id)
     
+    # Create motorcycle prices dictionary
+    motorcycle_prices = {
+        str(m.id): {
+            'model': m.model,
+            'price_rent_1d': m.price_rent_1d,
+            'price_practise_1d': m.price_practise_1d,
+            'price_test': m.price_test
+        } for m in motorcycles
+    }
+
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
@@ -110,10 +122,8 @@ def create_booking(request):
         'pickup_timeslots': pickup_timeslots,
         'dropoff_timeslots': dropoff_timeslots,
         'booked_dates': json.dumps(booked_dates),
-        'motorcycles': {str(m.id): {
-            'model': m.model,
-            'booked_dates': booked_dates[str(m.id)]
-        } for m in motorcycles}
+        'motorcycle_prices': json.dumps(motorcycle_prices, cls=DjangoJSONEncoder),
+        'motorcycles': motorcycles,  # Keep this for form rendering
     }
 
     return render(request, 'bookings/create_booking.html', context)  # Return the full context

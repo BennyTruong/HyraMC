@@ -188,9 +188,9 @@
                     <!-- Price -->
                     <tr>
                         <td><strong>Pris</strong></td>
-                        <td>1100 kr/dag</td>
-                        <td>1400 kr/dag</td>
-                        <td>1300 kr/dag</td>
+                        {% for motorcycle in motorcycles %}
+                            <td>{{ motorcycle.price_rent_1d }} kr/dag</td>
+                        {% endfor %}
                     </tr>
                     <!-- Booking Button -->
                     <tr>

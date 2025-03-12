@@ -75,6 +75,19 @@
             flex: 1 1 45%;
         }
 
+        #booking_date_display {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        #booking_date {
+            display: none;  /* Hide the actual input field */
+        }
+
         label {
             margin-bottom: 5px;
             font-weight: bold;
@@ -208,7 +221,8 @@
                 <div class="spacer"></div>
                 <div class="full-width">
                     <label for="id_booking_date">Datum för hyra:</label>
-                    <input type="text" id="booking_date" name="booking_date" readonly>
+                    <input type="text" id="booking_date_display" readonly>
+                    <input type="hidden" id="booking_date" name="booking_date">
                 </div>
                 <div class="spacer"></div>
                 <h3>Välj tid för upphämtning:</h3>
@@ -225,8 +239,9 @@
                     {% endfor %}
                 </select>
                 <div class="spacer"></div>
-                <div>
+                <div class="price-display">
                     <label>Pris:</label>
+                    <span id="price-value">-</span> kr
                 </div>
 
                 <button type="submit" class="submit-btn">Boka</button>
@@ -235,6 +250,7 @@
     </div>
 
     <script>
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Debug elements
             const motorcycleSelect = document.querySelector('#id_motorcycle');
@@ -291,15 +307,29 @@
                         minDate: "today",
                         disable: bookedDates[id] || [],
                         onChange: function(selectedDates, dateStr) {
-                            document.getElementById('booking_date').value = dateStr;
-                            document.getElementById('booking_date_display').value = flatpickr.formatDate(selectedDates[0], "j F Y");
+                            const bookingDateInput = document.getElementById('booking_date');
+                            const bookingDateDisplay = document.getElementById('booking_date_display');
+                            
+                            if (bookingDateInput) {
+                                bookingDateInput.value = dateStr;
+                            }
+                            
+                            if (bookingDateDisplay && selectedDates[0]) {
+                                bookingDateDisplay.value = this.formatDate(selectedDates[0], "j F Y");
+                            }
                         }
                     });
                 }
             });
         
+            // Replace the motorcycle prices mapping with:
+            const motorcyclePrices = JSON.parse('{{ motorcycle_prices|escapejs|safe }}');
+
             // Function to update motorcycle selection
             function updateMotorcycleSelection(selectedValue) {
+                // Update price based on selected motorcycle and service
+                const serviceSelect = document.querySelector('#id_service');
+                const priceElement = document.querySelector('#price-value');
                 console.log('Updating selection for:', selectedValue);
         
                 // Update image
@@ -328,6 +358,29 @@
         
                 // Clear booking date
                 bookingDateInput.value = '';
+
+                if (selectedValue && motorcyclePrices[selectedValue]) {
+                    const serviceValue = serviceSelect.value;
+                    let price = 0;
+                    
+                    // Set price based on service type
+                    switch(serviceValue) {
+                        case '1': // Rental
+                            price = motorcyclePrices[selectedValue].price_rent_1d;
+                            break;
+                        case '2': // Practice
+                            price = motorcyclePrices[selectedValue].price_practise_1d;
+                            break;
+                        case '3': // Test
+                            price = motorcyclePrices[selectedValue].price_test;
+                            break;
+                    }
+                    
+                    priceElement.textContent = price.toLocaleString();
+                } else {
+                    priceElement.textContent = '-';
+                }
+
             }
         
             // Set up event listeners
@@ -344,6 +397,16 @@
                     updateMotorcycleSelection(event.target.value);
                 });
             }
+
+                // Add service change listener here
+            const serviceSelect = document.querySelector('#id_service');
+            if (serviceSelect) {
+                serviceSelect.addEventListener('change', function() {
+                    const selectedMotorcycle = document.querySelector('#id_motorcycle').value;
+                    updateMotorcycleSelection(selectedMotorcycle);
+                });
+            }
+
         });
 
         document.querySelector('.booking-form').addEventListener('submit', function(e) {
