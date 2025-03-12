@@ -183,6 +183,132 @@
             margin: 0;
             font-size: 0.9rem;
         }
+
+        /* Reviews Section */
+        .reviews-container {
+            width: 100%;
+            padding: 20px 40px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .reviews-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            gap: 20px;
+            padding: 10px 0;
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .reviews-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .reviews-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .reviews-scroll::-webkit-scrollbar-thumb {
+            background: #f4a261;
+            border-radius: 4px;
+        }
+
+        .reviews-scroll::-webkit-scrollbar-thumb:hover {
+            background: #c44127;
+        }
+
+        .review-card {
+            flex: 0 0 auto;
+            width: 300px;
+            background: #fff;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .review-header {
+            margin-bottom: 10px;
+        }
+
+        .review-header h5 {
+            margin: 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .review-date {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        .review-rating {
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .hearts {
+            color: #ff4d4d;
+            margin-right: 5px;
+        }
+
+        .review-text {
+            color: #555;
+            margin: 10px 0;
+            line-height: 1.4;
+        }
+
+        .review-motorcycle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .reviews-container {
+            position: relative;
+            /* ...existing styles... */
+        }
+
+        .scroll-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(244, 162, 97, 0.9);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 2;
+            transition: background-color 0.3s ease;
+        }
+
+        .scroll-arrow:hover {
+            background: rgba(196, 65, 39, 0.9);
+        }
+
+        .left-arrow {
+            left: 10px;
+        }
+
+        .right-arrow {
+            right: 10px;
+        }
+
+        .reviews-scroll {
+            /* ...existing styles... */
+            scroll-snap-type: x mandatory;
+        }
+
+        .review-card {
+            /* ...existing styles... */
+            scroll-snap-align: center;
+        }
     </style>
 </head>
 
@@ -242,38 +368,85 @@
 
     <!-- Reviews -->
     <h3 class="reviews-title">Recensioner från tidigare kunder</h3>
-    <div class="container mt-4">
-        <div class="row justify-content-center">
+    <div class="reviews-container">
+        <button class="scroll-arrow left-arrow">&#10094;</button>
+        <div class="reviews-scroll">
             {% for review in reviews %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow border-0" style="border-radius: 25px;">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <div>
-                                <h5 class="card-title mb-0">{{ review.first_name }} {{ review.last_name|slice:":1" }}.</h5>
-                                <p class="text-muted mb-0">{{ review.created_at|date:"d F, Y" }}</p>
-                            </div>
-                        </div>
-                        <p class="card-text">
-                            <!-- Display rating with hearts -->
-                            <span class="text-danger">
-                                {% for i in "12345"|slice:review.rating %}
-                                    &#10084;
-                                {% endfor %}
-                            </span> {{ review.rating }}/5
-                        </p>
-                        <p>{{ review.review_text }}</p>
-                        <p><strong>Motorcykel:</strong> {{ review.motorcycle.model }}</p>
+            <div class="review-card">
+                <div class="review-content">
+                    <div class="review-header">
+                        <h5>{{ review.first_name }} {{ review.last_name|slice:":1" }}.</h5>
+                        <p class="review-date">{{ review.created_at|date:"d F, Y" }}</p>
                     </div>
+                    <p class="review-rating">
+                        <span class="hearts">
+                            {% for i in "12345"|slice:review.rating %}
+                                &#10084;
+                            {% endfor %}
+                        </span> 
+                        {{ review.rating }}/5
+                    </p>
+                    <p class="review-text">{{ review.review_text }}</p>
+                    <p class="review-motorcycle"><strong>Motorcykel:</strong> {{ review.motorcycle.model }}</p>
                 </div>
             </div>
             {% empty %}
-            <div class="col-md-12 text-center">
+            <div class="review-card">
                 <p>Inga recensioner ännu. Var först med att dela din upplevelse!</p>
             </div>
             {% endfor %}
         </div>
+        <button class="scroll-arrow right-arrow">&#10095;</button>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollContainer = document.querySelector('.reviews-scroll');
+            const leftArrow = document.querySelector('.left-arrow');
+            const rightArrow = document.querySelector('.right-arrow');
+            const scrollAmount = 300; // Width of one review card
+            let autoScrollInterval;
+        
+            // Arrow click handlers
+            leftArrow.addEventListener('click', () => {
+                scrollContainer.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+        
+            rightArrow.addEventListener('click', () => {
+                scrollContainer.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            });
+        
+            // Auto scroll function
+            function startAutoScroll() {
+                autoScrollInterval = setInterval(() => {
+                    if (scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth) {
+                        // Reset to start when reaching the end
+                        scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                    }
+                }, 5000); // Scroll every 5 seconds
+            }
+        
+            // Pause auto-scroll on hover or touch
+            scrollContainer.addEventListener('mouseenter', () => {
+                clearInterval(autoScrollInterval);
+            });
+        
+            scrollContainer.addEventListener('mouseleave', () => {
+                startAutoScroll();
+            });
+        
+            // Start auto-scroll
+            startAutoScroll();
+        });
+        </script>
 
     {% endblock %}
 </body>
