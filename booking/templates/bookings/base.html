@@ -29,11 +29,10 @@
 
         .navbar {
             background-color: #f9f9f9;
-            overflow: hidden;
-            font-family: 'Poppins', 'sans-serif';
-            padding: 2px 0;
-            justify-content: flex-start;  /* Logo on the left, menu on the right */
+            padding: 2px 10px;
             display: flex;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .navbar a {
@@ -61,9 +60,11 @@
         .navbar-menu {
             list-style: none;
             display: flex;
-            justify-content: center;  /* Center the menu items */
+            justify-content: center;
             gap: 20px;
-            flex-grow: 1;  /* This ensures the menu grows and takes up available space */
+            flex-grow: 1;
+            margin: 0;
+            padding: 0;
         }
         
         .navbar-menu a {
@@ -88,13 +89,105 @@
             display: block;
         }
 
+        /* Footer styling */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-info {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-item i {
+            color: #f4a261;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .footer-copyright {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #999;
+            padding: 0 20px;
+        }
+
         /* For mobile view */
         @media screen and (max-width: 768px) {
-            .navbar a {
-                float: none;
-                display: block;
-                text-align: left;
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
             }
+
+            .navbar-logo {
+                margin: 0 auto;
+                padding: 10px 0;
+            }
+
+            .navbar-menu {
+                flex-direction: column;
+                width: 100%;
+                gap: 5px;
+                align-items: center;
+            }
+
+            .navbar-menu a {
+                width: 100%;
+                text-align: center;
+                line-height: normal;
+                padding: 15px 0;
+                font-size: 1.2rem;
+            }
+            
+            footer {
+                padding: 20px 10px;
+            }
+
+            .footer-content {
+                padding: 0 10px;
+            }
+
+            .footer-info {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .footer-item {
+                justify-content: flex-start;
+                font-size: 0.9rem;
+                padding: 5px 0;
+            }
+
+            .footer-item span {
+                word-break: break-word;
+            }
+
+            .footer-copyright {
+                margin-top: 20px;
+                font-size: 0.8rem;
+            }
+            
         }
 
     </style>
@@ -125,7 +218,25 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Motorcycle Rentals. All rights reserved.</p>
+        <div class="footer-content">
+            <div class="footer-info">
+                <div class="footer-item">
+                    <i class="fas fa-phone"></i>
+                    <span>072-997 58 07</span>
+                </div>
+                <div class="footer-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>info@mchyra.se</span>
+                </div>
+                <div class="footer-item">
+                    <i class="fas fa-building"></i>
+                    <span>Org.nr: 559321-6731</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2024 MC Hyra. All rights reserved.</p>
+        </div>
     </footer>
 
 </body>

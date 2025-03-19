@@ -86,6 +86,42 @@
             color: #f4a261;
             letter-spacing: 2px;
         }
+        
+        .terms-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        .terms-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .terms-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .terms-section li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .terms-section li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #f4a261;
+        }
+
+        .important-note {
+            color: #c44127;
+            font-weight: bold;
+        }
     </style>
 
 </head>
@@ -104,7 +140,7 @@
         {% endif %}
         
         <div class="success-message">
-            <p>Vi har mottagit din bokning och kommer att kontakta dig inom kort.</p>
+            <p>Vi har mottagit din bokning och kommer att kontakta dig inom kort för att bekräfta din bokning och betalning.</p>
         
             <div class="booking-id">
                 <h3>Ditt bokningsnummer:</h3>
@@ -114,12 +150,23 @@
             {% if has_pending %}
             <div class="pending-notice">
                 <p>Obs! Det finns redan en väntande bokning av någon annan för detta datum. 
-                Din bokning har sparats och kommer att granskas av vår personal.</p>
+                Din bokning har sparats och kommer att hanteras så snart som möjligt.</p>
             </div>
             {% endif %}
 
         </div>
         
+        <div class="terms-section">
+            <h3>Viktiga villkor för din bokning:</h3>
+            <ul>
+                <li>Avbokning måste ske senast 48 timmar före bokad tid för full återbetalning.</li>
+                <li>Om avbokning sker 24 timmar före bokad tid debiteras 50 % av kostnaden.</li>
+                <li class="important-note">Motorcykeln ska återlämnas med full tank bensin, den kommer vara fulltankad när den hämtas.</li>
+                <li>Vid olycka eller skada debiteras en självrisk som framgår i bekräftelsemailet.</li>
+                <li>Vid frågor eller ändringar, kontakta oss på telefon eller mail med ditt bokningsnummer.</li>
+            </ul>
+        </div>
+
         <div class="action-buttons">
             <a href="{% url 'home' %}" class="btn">Tillbaka till startsidan</a>
         </div>

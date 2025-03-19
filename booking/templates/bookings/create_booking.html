@@ -156,6 +156,49 @@
             cursor: not-allowed;
         }
 
+
+        .location-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .location-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .location-section p {
+            margin-bottom: 10px;
+        }
+
+        .location-section .address {
+            font-weight: bold;
+            color: #444;
+        }
+
+        .map-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            border: none;
+            margin-top: 10px;
+        }
+
+        .map-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #f4a261;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .map-link:hover {
+            color: #c44127;
+        }
+
     </style>
 
 </head>
@@ -261,6 +304,27 @@
                 </div>
 
                 <button type="submit" class="submit-btn">Boka</button>
+                <div class="spacer"></div>
+                <div class="spacer"></div>
+
+                <div class="location-section">
+                    <h3>Upphämtningsplats</h3>
+                    <p class="address">Jakobsberg, Järfälla</p>
+                    <iframe 
+                        class="map-preview"
+                        frameborder="0"
+                        src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d2029.8936138609083!2d17.83239265411228!3d59.41816956317502!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sse!4v1742405856095!5m2!1sen!2sse"
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <a href="https://goo.gl/maps/YOUR_LOCATION_LINK" 
+                       class="map-link" 
+                       target="_blank" 
+                       rel="noopener noreferrer">
+                        Öppna i Google Maps ↗
+                    </a>
+                </div>
+ 
             </div>
         </form>
     </div>
