@@ -50,9 +50,7 @@ def get_booked_dates_for_motorcycle(motorcycle_id):
 def create_booking(request):
     pickup_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # 9 AM to 5 PM for pickup
     dropoff_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # Same range for dropoff
-    
-    # Get all motorcycles
-    motorcycles = Motorcycle.objects.all()
+    motorcycles = Motorcycle.objects.all() # Get all motorcycles
     
     # Get booked dates for each motorcycle
     booked_dates = {}
@@ -70,8 +68,19 @@ def create_booking(request):
         } for m in motorcycles
     }
 
+    context = {
+        'form': BookingForm(),
+        'pickup_timeslots': pickup_timeslots,
+        'dropoff_timeslots': dropoff_timeslots,
+        'booked_dates': json.dumps(booked_dates),
+        'motorcycle_prices': json.dumps(motorcycle_prices, cls=DjangoJSONEncoder),
+        'motorcycles': motorcycles,  # Keep this for form rendering
+    }    
+
     if request.method == 'POST':
         form = BookingForm(request.POST)
+        context['form'] = form  # Update form in context
+
         if form.is_valid():
             try:
                 # Get the date and time values
@@ -106,10 +115,14 @@ def create_booking(request):
                 # Save the booking
                 booking.save()
                 
+                # Store booking ID in session for success page
+                request.session['booking_id'] = booking.booking_id
+                request.session['has_pending'] = pending_booking
+
                 # Store pending status in session
                 request.session['has_pending'] = pending_booking
 
-                messages.success(request, 'Bokning skapad!')
+                messages.success(request, f'Bokning skapad! Ditt bokningsnummer är: {booking.booking_id}')
                 return redirect('booking_success')
 
             except ValueError as e:
@@ -117,15 +130,6 @@ def create_booking(request):
                 return render(request, 'bookings/create_booking.html', context)
     else:
         form = BookingForm()
-
-    context = {
-        'form': form,
-        'pickup_timeslots': pickup_timeslots,
-        'dropoff_timeslots': dropoff_timeslots,
-        'booked_dates': json.dumps(booked_dates),
-        'motorcycle_prices': json.dumps(motorcycle_prices, cls=DjangoJSONEncoder),
-        'motorcycles': motorcycles,  # Keep this for form rendering
-    }
 
     return render(request, 'bookings/create_booking.html', context)  # Return the full context
 

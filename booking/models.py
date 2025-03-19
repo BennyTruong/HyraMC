@@ -1,5 +1,12 @@
 from django.db import models
 from django.utils import timezone
+import random
+import string
+
+# Function to get or create the default motorcycle
+def get_default_motorcycle():
+    motorcycle, created = Motorcycle.objects.get_or_create(model='Välj MC')
+    return motorcycle.id
 
 class Motorcycle(models.Model):
     model = models.CharField(max_length=100)
@@ -20,10 +27,6 @@ class Service(models.Model):
     def __str__(self):
         return self.service  # This will display the service name in the dropdown
 
-# Function to get or create the default motorcycle
-def get_default_motorcycle():
-    motorcycle, created = Motorcycle.objects.get_or_create(model='Välj MC')
-    return motorcycle.id
 class Booking(models.Model):
     STATUS_CHOICES = [
         ('PENDING', 'Pending'),
@@ -44,12 +47,29 @@ class Booking(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
     booking_message = models.TextField(blank=True, null=True)
+    booking_id = models.CharField(max_length=5, unique=True, editable=False, null=True)
+
+    def generate_booking_id(self):
+        """Generate a unique 5-letter booking ID"""
+        while True:
+            # Generate a random 5-letter string
+            new_id = ''.join(random.choices(string.ascii_uppercase, k=5))
+            # Check if it's unique
+            if not Booking.objects.filter(booking_id=new_id).exists():
+                return new_id
+
+    def save(self, *args, **kwargs):
+        # Generate booking_id if it doesn't exist
+        if not self.booking_id:
+            self.booking_id = self.generate_booking_id()
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Booking by {self.first_name} {self.last_name} for {self.service} on {self.booking_date} from {self.pickup_time} to {self.dropoff_time}"
+        return f"Booking {self.booking_id} of {self.motorcycle} by {self.first_name} {self.last_name} for {self.service} on {self.booking_date} from {self.pickup_time} to {self.dropoff_time}"
     
     def is_active(self):
         return self.status in ['PENDING', 'CONFIRMED']
+
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)

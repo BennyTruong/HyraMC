@@ -71,6 +71,21 @@
             margin: 0;
             color: #e65100;
         }
+
+        .booking-id {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .id-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f4a261;
+            letter-spacing: 2px;
+        }
     </style>
 
 </head>
@@ -91,6 +106,11 @@
         <div class="success-message">
             <p>Vi har mottagit din bokning och kommer att kontakta dig inom kort.</p>
         
+            <div class="booking-id">
+                <h3>Ditt bokningsnummer:</h3>
+                <p class="id-display">{{ request.session.booking_id }}</p>
+            </div>
+
             {% if has_pending %}
             <div class="pending-notice">
                 <p>Obs! Det finns redan en väntande bokning av någon annan för detta datum. 
