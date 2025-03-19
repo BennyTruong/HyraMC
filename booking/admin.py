@@ -9,14 +9,15 @@ admin.site.register(Service)
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('booking_id', 'status', 'first_name', 'last_name', 'motorcycle', 'service', 'booking_date', 'pickup_time', 'dropoff_time', 'created_at', 'phone_number', 'email')
-    list_filter = ('status', 'motorcycle', 'service', 'booking_date')
+    list_display = ('booking_id', 'status', 'payment_done', 'first_name', 'last_name', 'motorcycle', 'service', 'booking_date', 'pickup_time', 'dropoff_time', 'created_at', 'phone_number', 'email')
+    list_filter = ('status', 'payment_done', 'motorcycle', 'service', 'booking_date')
     search_fields = ('booking_id', 'first_name', 'last_name', 'email')
     readonly_fields = ('booking_id', 'created_at')  # Make booking_id read-only in detail view
+    list_editable = ['payment_done']  # Allow editing payment status directly in list view
 
     fieldsets = (
         ('Booking Information', {
-            'fields': ('booking_id', 'status', 'created_at')
+            'fields': ('booking_id', 'status', 'payment_done', 'created_at')
         }),
         ('Customer Details', {
             'fields': ('first_name', 'last_name', 'phone_number', 'email')

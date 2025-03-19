@@ -47,7 +47,8 @@ class Booking(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
     booking_message = models.TextField(blank=True, null=True)
-    booking_id = models.CharField(max_length=5, unique=True, editable=False, null=True)
+    booking_id = models.CharField(max_length=5, unique=True, editable=False)
+    payment_done = models.BooleanField(default=False, verbose_name="Payment Done")
 
     def generate_booking_id(self):
         """Generate a unique 5-letter booking ID"""
