@@ -28,11 +28,15 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1', 
-    'localhost', 
+    'localhost',
+    'mchyra.se',
+    'mchyra.com', 
     'bennytruong.se',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://mchyra.se",
+    "https://mchyra.com",
     "https://bennytruong.se",
 ]
 
