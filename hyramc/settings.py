@@ -30,14 +30,12 @@ ALLOWED_HOSTS = [
     '127.0.0.1', 
     'localhost',
     'mchyra.se',
-    'mchyra.com', 
-    'bennytruong.se',
+    'mchyra.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://mchyra.se",
     "https://mchyra.com",
-    "https://bennytruong.se",
 ]
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
