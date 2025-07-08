@@ -1,7 +1,7 @@
 # bookings/admin.py
 
 from django.contrib import admin
-from .models import Booking, Motorcycle, Service, ContactMessage, Review
+from .models import Booking, Motorcycle, Service, ContactMessage, Review, BookingDiscountConfig
 
 # Register your models here
 admin.site.register(Motorcycle)
@@ -9,8 +9,8 @@ admin.site.register(Service)
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('booking_id', 'status', 'payment_done', 'first_name', 'last_name', 'motorcycle', 'service', 'booking_date', 'pickup_time', 'dropoff_time', 'created_at', 'phone_number', 'email')
-    list_filter = ('status', 'payment_done', 'motorcycle', 'service', 'booking_date')
+    list_display = ('booking_id', 'status', 'payment_done', 'first_name', 'last_name', 'motorcycle', 'service', 'booking_start_date', 'booking_end_date', 'pickup_time', 'dropoff_time', 'created_at', 'phone_number', 'email')
+    list_filter = ('status', 'payment_done', 'motorcycle', 'service', 'booking_start_date', 'booking_end_date')
     search_fields = ('booking_id', 'first_name', 'last_name', 'email')
     readonly_fields = ('booking_id', 'created_at')  # Make booking_id read-only in detail view
     list_editable = ['payment_done']  # Allow editing payment status directly in list view
@@ -23,7 +23,7 @@ class BookingAdmin(admin.ModelAdmin):
             'fields': ('first_name', 'last_name', 'phone_number', 'email')
         }),
         ('Reservation Details', {
-            'fields': ('motorcycle', 'service', 'booking_date', 'pickup_time', 'dropoff_time')
+            'fields': ('motorcycle', 'service', 'booking_start_date', 'booking_end_date', 'pickup_time', 'dropoff_time')
         }),
         ('Additional Information', {
             'fields': ('booking_message',)
@@ -36,6 +36,12 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'email', 'subject', 'message','created_at')
     search_fields = ('name', 'phone', 'email', 'subject')
     list_filter = ('name', 'phone', 'email', 'created_at')
+
+from .models import BookingDiscountConfig
+
+@admin.register(BookingDiscountConfig)
+class BookingDiscountConfigAdmin(admin.ModelAdmin):
+    list_display = ("discount_3_to_6_days", "discount_7_or_more_days", "updated_at")
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):

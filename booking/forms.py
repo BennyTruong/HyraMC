@@ -6,17 +6,19 @@ from .models import Booking, ContactMessage, Review
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['first_name', 'last_name', 'phone_number', 'email', 'motorcycle', 'service', 'booking_date', 'pickup_time', 'dropoff_time', 'booking_message']
+        fields = ['first_name', 'last_name', 'phone_number', 'email', 'motorcycle', 'service', 'booking_start_date', 'booking_end_date', 'pickup_time', 'dropoff_time', 'booking_message']
         labels = {'first_name': 'Förnamn',
                   'last_name': 'Efternamn',
                   'phone_number': 'Telefonnummer',
                   'email': 'E-mail',
                   'motorcycle': 'Motorcykel',
                   'service': 'Hyrning',
-                  'booking_date': 'Datum för hyra',
+                  'booking_start_date': 'Startdatum för hyra',
+                  'booking_end_date': 'Slutdatum för hyra',
         }
         widgets = {
-            'booking_date': forms.DateInput(attrs={'id': 'datepicker', 'type': 'text'}),
+            'booking_start_date': forms.DateInput(attrs={'id': 'datepicker_start', 'type': 'text'}),
+            'booking_end_date': forms.DateInput(attrs={'id': 'datepicker_end', 'type': 'text'}),
             'pickup_time': forms.HiddenInput(),  # Pickup time will be selected via buttons
             'dropoff_time': forms.HiddenInput(),  # Dropoff time will be selected via buttons
             'booking_message': forms.Textarea(attrs={

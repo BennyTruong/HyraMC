@@ -41,7 +41,8 @@ class Booking(models.Model):
     email = models.EmailField()
     motorcycle = models.ForeignKey(Motorcycle, on_delete=models.CASCADE)
     service = models.ForeignKey(Service, on_delete=models.CASCADE)
-    booking_date = models.DateField()
+    booking_start_date = models.DateField()
+    booking_end_date = models.DateField()
     pickup_time = models.TimeField()
     dropoff_time = models.TimeField()
     created_at = models.DateTimeField(default=timezone.now)
@@ -49,7 +50,40 @@ class Booking(models.Model):
     booking_message = models.TextField(blank=True, null=True)
     booking_id = models.CharField(max_length=5, unique=True, editable=False)
     payment_done = models.BooleanField(default=False, verbose_name="Payment Done")
+    price = models.IntegerField(default=0, verbose_name="Total Price (SEK)")
 
+    def calculate_price(self):
+        """Calculate price based on number of days and discount rules."""
+        days = (self.booking_end_date - self.booking_start_date).days + 1
+        # Get base price per day depending on service
+        if self.service_id and self.motorcycle_id:
+            if self.service_id == 1:  # Adjust service_id as needed
+                price_per_day = self.motorcycle.price_rent_1d
+            elif self.service_id == 2:
+                price_per_day = self.motorcycle.price_practise_1d
+            elif self.service_id == 3:
+                price_per_day = self.motorcycle.price_test
+            else:
+                price_per_day = 0
+        else:
+            price_per_day = 0
+
+        # Fetch discount config (use defaults if not set)
+        try:
+            config = BookingDiscountConfig.objects.first()
+            discount_3_to_6 = config.discount_3_to_6_days if config else 0.9
+            discount_7_or_more = config.discount_7_or_more_days if config else 0.8
+        except Exception:
+            discount_3_to_6 = 0.9
+            discount_7_or_more = 0.8
+
+        total = price_per_day * days
+        if 3 <= days <= 6:
+            total = int(total * discount_3_to_6)
+        elif days >= 7:
+            total = int(total * discount_7_or_more)
+        return total
+    
     def generate_booking_id(self):
         """Generate a unique 5-letter booking ID"""
         while True:
@@ -63,13 +97,32 @@ class Booking(models.Model):
         # Generate booking_id if it doesn't exist
         if not self.booking_id:
             self.booking_id = self.generate_booking_id()
+        # Set price if not manually set
+        if not self.price or self.price == 0:
+            self.price = self.calculate_price()
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Booking {self.booking_id} of {self.motorcycle} by {self.first_name} {self.last_name} for {self.service} on {self.booking_date} from {self.pickup_time} to {self.dropoff_time}"
+        return (
+        f"Booking {self.booking_id} of {self.motorcycle} by {self.first_name} {self.last_name} "
+        f"for {self.service} from {self.booking_start_date} to {self.booking_end_date} "
+        f"({self.pickup_time}–{self.dropoff_time})"
+    )
     
     def is_active(self):
         return self.status in ['PENDING', 'CONFIRMED']
+
+class BookingDiscountConfig(models.Model):
+    discount_3_to_6_days = models.FloatField(default=0.9, verbose_name="3–6 days ratio")
+    discount_7_or_more_days = models.FloatField(default=0.8, verbose_name="7+ days ratio")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return "Booking Discount Configuration"
+
+    class Meta:
+        verbose_name = "Booking Discount Config"
+        verbose_name_plural = "Booking Discount Configs"
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=100)

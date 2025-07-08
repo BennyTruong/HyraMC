@@ -37,15 +37,19 @@ def generate_timeslots(start_time, end_time, interval_minutes=60):
     return timeslots
 
 def get_booked_dates_for_motorcycle(motorcycle_id):
-    # Get all active bookings for this motorcycle
     bookings = Booking.objects.filter(
         motorcycle_id=motorcycle_id,
-        booking_date__gte=datetime.now().date(),
+        booking_end_date__gte=datetime.now().date(),
         status__in=['CONFIRMED']
-    ).values_list('booking_date', flat=True)
-    
-    # Convert dates to string format
-    return [booking.strftime('%Y-%m-%d') for booking in bookings]
+    ).values_list('booking_start_date', 'booking_end_date')
+
+    booked_days = []
+    for start_date, end_date in bookings:
+        current_date = start_date
+        while current_date <= end_date:
+            booked_days.append(current_date.strftime('%Y-%m-%d'))
+            current_date += timedelta(days=1)
+    return booked_days
 
 def create_booking(request):
     pickup_timeslots = generate_timeslots(time(7, 0), time(22, 0), 30)  # 9 AM to 5 PM for pickup
@@ -84,19 +88,21 @@ def create_booking(request):
         if form.is_valid():
             try:
                 # Get the date and time values
-                booking_date = request.POST.get('booking_date')
+                booking_start_date = request.POST.get('booking_start_date')
+                booking_end_date = request.POST.get('booking_end_date')
                 pickup_time = request.POST.get('pickup_time')
                 dropoff_time = request.POST.get('dropoff_time')
                 motorcycle_id = request.POST.get('motorcycle')
 
-                if not all([booking_date, pickup_time, dropoff_time]):
+                if not all([booking_start_date, booking_end_date, pickup_time, dropoff_time]):
                     messages.error(request, 'Vänligen fyll i alla obligatoriska fält.')
                     return render(request, 'bookings/create_booking.html', context)
 
                 # Check for pending bookings
                 pending_booking = Booking.objects.filter(
                     motorcycle_id=motorcycle_id,
-                    booking_date=datetime.strptime(booking_date, '%Y-%m-%d').date(),
+                    booking_start_date=datetime.strptime(booking_start_date, '%Y-%m-%d').date(),
+                    booking_end_date=datetime.strptime(booking_end_date, '%Y-%m-%d').date(),
                     status='PENDING'
                 ).exists()
 
@@ -105,7 +111,8 @@ def create_booking(request):
                 
                 try:
                     # Convert string dates to proper datetime objects
-                    booking.booking_date = datetime.strptime(booking_date, '%Y-%m-%d').date()
+                    booking.booking_start_date = datetime.strptime(booking_start_date, '%Y-%m-%d').date()
+                    booking.booking_end_date = datetime.strptime(booking_end_date, '%Y-%m-%d').date()
                     booking.pickup_time = datetime.strptime(pickup_time, '%H:%M').time()
                     booking.dropoff_time = datetime.strptime(dropoff_time, '%H:%M').time()
                 except ValueError as e:
