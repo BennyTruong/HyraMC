@@ -1,0 +1,125 @@
+{% extends 'bookings/base.html' %}
+{% block title %}Uthyrningspolicy{% endblock %}
+{% block content %}
+<style>
+.rentalpolicy-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 32px rgba(244,162,97,0.10), 0 1.5px 6px rgba(0,0,0,0.04);
+    max-width: 650px;
+    margin: 40px auto 32px auto;
+    padding: 36px 28px 28px 28px;
+    color: #333;
+}
+.rentalpolicy-card h1 {
+    font-size: 2.2rem;
+    color: #000000;
+    margin-bottom: 18px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+.rentalpolicy-card p.intro {
+    font-size: 1.15rem;
+    color: #444;
+    margin-bottom: 22px;
+    text-align: center;
+}
+.rentalpolicy-section {
+    margin-bottom: 28px;
+}
+.rentalpolicy-section h2 {
+    font-size: 1.2rem;
+    color: #7d3800;
+    margin-bottom: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.rentalpolicy-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.rentalpolicy-section ul li {
+    background: #fff7ed;
+    color: #000000;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.rentalpolicy-section ul li:last-child {
+    margin-bottom: 0;
+}
+.rentalpolicy-card .contact-link {
+    display: block;
+    text-align: center;
+    margin-top: 32px;
+    font-size: 1.1rem;
+    color: #c44127;
+    text-decoration: underline;
+    font-weight: 500;
+}
+@media (max-width: 700px) {
+    .rentalpolicy-card {
+        padding: 18px 6vw 18px 6vw;
+        margin: 18px 0;
+    }
+    .rentalpolicy-card h1 {
+        font-size: 1.4rem;
+    }
+}
+</style>
+
+<div class="rentalpolicy-card">
+    <h1>
+        <svg width="32" height="32" fill="none" viewBox="0 0 48 48" style="vertical-align:middle;margin-right:8px;">
+            <circle cx="24" cy="24" r="24" fill="#f4a261"/>
+            <path d="M16 32l6-12 8 8 6-12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Villkor vid uthyrning av våra motorcyklar
+    </h1>
+    <p class="intro">
+        När du hyr en motorcykel hos oss så går du med på följande villkor:
+    </p>
+
+    <div class="rentalpolicy-section">
+        <h2>
+            <span>💳</span> Betalning & Hämtning/Lämning
+        </h2>
+        <ul>
+            <li>🪪 Du ska kunna visa upp en valfri ID-handling.</li>
+            <li>💰 Hela hyran betalas vid tillfället som du hämtar ut fordonet.</li>
+            <li>🚫 Vi tar ingen deposition.</li>
+            <li>⛽ Motorcykeln kommer vara fulltankad när den hämtas så tanka fullt innan den återlämnas (Bensin 95).</li>
+        </ul>
+    </div>
+
+    <div class="rentalpolicy-section">
+        <h2>
+            <span>📅</span> Avbokningsregler
+        </h2>
+        <ul>
+            <li>⏰ Avbokning ska ske senast 48 timmar före bokad tid.</li>
+            <li>💸 Senare avbokningar debiteras med 50 % av hyresbeloppet.</li>
+        </ul>
+    </div>
+
+    <div class="rentalpolicy-section">
+        <h2>
+            <span>🛡️</span> Ansvar och försäkring
+        </h2>
+        <ul>
+            <li>🧑‍🔧 Hyrestagaren ansvarar för fordonet under hela hyresperioden.</li>
+            <li>📝 Fordonet är försäkrat. Vid olycka eller skada betalar hyrestagaren självrisken på 3000kr.</li>
+        </ul>
+    </div>
+
+    <a class="contact-link" href="{% url 'contact' %}">Har du frågor? Kontakta oss här &rarr;</a>
+</div>
+{% endblock %}

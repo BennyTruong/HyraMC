@@ -173,3 +173,6 @@ def add_review(request):
         form = ReviewForm()
     
     return render(request, 'bookings/add_review.html', {'form': form})
+
+def rentalpolicy(request):
+    return render(request, 'bookings/rentalpolicy.html')
