@@ -13,6 +13,7 @@ def home(request):
 
 def price(request):
     motorcycles = Motorcycle.objects.all().order_by('id')
+    motorcycles = [motorcycles[1], motorcycles[0], motorcycles[2]] #Reorder to GSF600, GSF650, XL1000
     return render(request, 'bookings/price.html', {'motorcycles': motorcycles})
 
 def contact(request):

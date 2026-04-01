@@ -23,7 +23,7 @@ ENV PYTHONUNBUFFERED=1
 RUN python manage.py collectstatic --noinput
 
 # Step 8: Run database migrations
-RUN python manage.py migrate
+# RUN python manage.py migrate
 
 # Step 9: Expose the port that Gunicorn will run on
 EXPOSE 8000
