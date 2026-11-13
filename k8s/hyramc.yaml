@@ -1,0 +1,148 @@
+# Matches the objects already running in the "default" namespace
+# (deployment mchyra, mchyra-service, mchyra-ingress, PVC mchyra-sqlite-pvc),
+# so `kubectl apply` updates them in place. The PVC itself is not part of this
+# file and is left untouched.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mchyra
+  namespace: default
+  annotations:
+    # Keel: poll Docker Hub and roll out when the digest behind :latest changes
+    keel.sh/policy: force
+    keel.sh/match-tag: "true"
+    keel.sh/trigger: poll
+    keel.sh/pollSchedule: "@every 2m"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mchyra
+  template:
+    metadata:
+      labels:
+        app: mchyra
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      containers:
+        - name: mchyra-app
+          image: bennytruong/hyramc:latest
+          imagePullPolicy: Always
+          env:
+            # Makes Django use /data/db.sqlite3 (the persistent volume)
+            - name: DOCKER_ENVIRONMENT
+              value: "1"
+          ports:
+            - containerPort: 8000
+          # tcpSocket instead of httpGet: Django rejects probe requests whose
+          # Host header (the pod IP) is not in ALLOWED_HOSTS, which would fail the probe
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          volumeMounts:
+            - name: sqlite-storage
+              mountPath: /data
+      volumes:
+        - name: sqlite-storage
+          persistentVolumeClaim:
+            claimName: mchyra-sqlite-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mchyra-service
+  namespace: default
+spec:
+  selector:
+    app: mchyra
+  ports:
+    - port: 80
+      targetPort: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mchyra-ingress
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: mchyra.se
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mchyra-service
+                port:
+                  number: 80
+    - host: www.mchyra.se
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mchyra-service
+                port:
+                  number: 80
+    - host: mchyra.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mchyra-service
+                port:
+                  number: 80
+    - host: www.mchyra.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mchyra-service
+                port:
+                  number: 80
+    - host: mchyra.bytech.se
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mchyra-service
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - mchyra.se
+        - www.mchyra.se
+      secretName: mchyra-se-tls
+    - hosts:
+        - mchyra.com
+        - www.mchyra.com
+      secretName: mchyra-com-tls
+    # New separate certificate so the existing two are left alone
+    - hosts:
+        - mchyra.bytech.se
+      secretName: mchyra-bytech-tls
